@@ -1,5 +1,5 @@
 # 공공데이터를 기반으로 한 여행 계획 어플리케이션 
-###(travel planner application based on open data)
+(travel planner application based on open data)
 
 한국산업기술대학교 컴퓨터공학과
 2014150004김문희 2014152018신희경
