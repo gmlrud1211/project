@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Tmap Test/WebContent/click_marker.jsp&apos; to &apos;move_marker.jsp&apos;" description="Rename resource &apos;click_marker.jsp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="WebContent/click_marker.jsp" name="move_marker.jsp" stamp="1484829075434" updateReferences="true"/>
+</session>
