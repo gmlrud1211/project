@@ -9,6 +9,8 @@ import android.os.Handler;
  * Created by db-14 on 2017. 2. 7..
  */
 public class IntroActivity extends Activity {
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);

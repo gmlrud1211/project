@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context="com.example.db_14.travelplanner.MainActivity">
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="800px"
+        android:layout_width="400px"
+        android:layout_height="400px"
         android:id="@+id/mapview">
     </FrameLayout>
 
@@ -16,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:id="@+id/textview"
         android:text="tmap test">
     </TextView>
 </LinearLayout>
