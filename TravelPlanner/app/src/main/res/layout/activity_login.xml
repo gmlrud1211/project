@@ -40,8 +40,8 @@
         android:layout_marginTop="15dp"
         android:gravity="center_horizontal">
 
-        <Button
-            android:id="@+id/login"
+        <Button_
+            android:id="@+id/btn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="로그인"
@@ -49,7 +49,7 @@
             android:background="@drawable/button_background" />
 
         <Button
-            android:id="@+id/signup"
+            android:id="@+id/btn_signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="회원가입"
