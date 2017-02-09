@@ -111,7 +111,9 @@ public class LoginActivity extends Activity {
                     }
                 });
 
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("USRID", usr_id.getText().toString());
+                startActivity(intent);
                 finish();
             }
             else

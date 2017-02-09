@@ -1,25 +1,45 @@
 package com.example.db_14.travelplanner;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by a0104 on 2017-02-08.
  */
 
 public class SignupActivity extends Activity {
+
+    HttpPost httpPost;
+    HttpResponse response;
+    HttpClient httpClient;
+    List<NameValuePair> nameValuePairs;
+    ProgressDialog dialog = null;
 
     EditText id, pwd, name;
     Button btn_ok;
@@ -47,71 +67,64 @@ public class SignupActivity extends Activity {
                     return;
                 }
 
-                runOnUiThread(new Runnable() {
+                dialog = ProgressDialog.show(SignupActivity.this, "", "Validating user...", true);
+
+                new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        String uname = name.getText().toString();
-                        String uid = id.getText().toString();
-                        String upwd = pwd.getText().toString();
-
-                        try{
-                            URL url = new URL("http://52.79.131.13/app_signup_db.php?"+"name="+ URLEncoder.encode(uname, "UTF-8")
-                            + "&id=" + URLEncoder.encode(uid, "UTF-8") + "&password=" + URLEncoder.encode(upwd, "UTF-8"));
-
-                            url.openStream();
-
-                            String result = getXmlData("insertresult.xml", "result");
-
-                            if(result.equals("1"))
-                            {
-                                Toast.makeText(getApplication(), "가입 완료", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                            else
-                            {
-                                Toast.makeText(getApplicationContext(), "가입 실패( ID 중복일 수 있음 )", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
+                        Looper.prepare();
+                        signup(id.getText().toString(), pwd.getText().toString(), name.getText().toString());
+                        Looper.loop();
                     }
-                });
+                }).start();
             }
         });
     }
 
-    private String getXmlData(String filename, String str)
+    void signup(String id, String pwd, String name)
     {
-        String rss = "http://52.79.131.13/";
-        String ret = "";
-
         try{
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-            XmlPullParser xpp = factory.newPullParser();
-            URL server = new URL(rss+filename);
-            InputStream is = server.openStream();
-            xpp.setInput(is, "UTF-8");
+            httpClient = new DefaultHttpClient();
+            httpPost = new HttpPost("http://52.79.131.13/signup_db.php");
 
-            int eventType = xpp.getEventType();
+            nameValuePairs = new ArrayList<NameValuePair>(3);
+            nameValuePairs.add(new BasicNameValuePair("id", id));
+            nameValuePairs.add(new BasicNameValuePair("password", pwd));
+            nameValuePairs.add(new BasicNameValuePair("name", name));
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            response = httpClient.execute(httpPost);
 
-            while(eventType != XmlPullParser.END_DOCUMENT)
-            {
-                if(eventType == XmlPullParser.START_TAG)
-                {
-                    if(xpp.getName().equals(str))
-                    {
-                        ret = xpp.nextText();
-                    }
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+
+            final String response = httpClient.execute(httpPost, responseHandler);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.dismiss();
                 }
-                eventType = xpp.next();
+            });
+
+            if(response.equalsIgnoreCase("success"))
+            {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "회원가입 성공 로그인 해주세요.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                finish();
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "회원가입 실패 (아이디 중복일 수 있습니다.)", Toast.LENGTH_SHORT).show();
             }
         }
         catch (Exception e){
+            dialog.dismiss();
             e.printStackTrace();
         }
-        return ret;
     }
 }

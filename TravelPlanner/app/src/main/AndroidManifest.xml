@@ -18,10 +18,12 @@
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".LoginActivity"></activity>
         <activity android:name=".SignupActivity"></activity>
+        <activity android:name=".TourActivity"></activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
 
 </manifest>
