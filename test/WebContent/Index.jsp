@@ -86,11 +86,11 @@ img{border:0;}
 			<div class="logo">
 				<h1> <a href="Index.jsp">Travel Planner</a> </h1>
 			</div>
-			<div class="logo2">
+			<!-- <div class="logo2">
 				<h6>
 					<a href="Index.jsp">제주도</a>
 				</h6>
-			</div>
+			</div> -->
 			
 			<!--logo-->
 			<div class="top-nav">
