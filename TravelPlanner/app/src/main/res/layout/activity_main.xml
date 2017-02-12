@@ -22,16 +22,29 @@
         android:id="@+id/textview"
         android:text="tmap test">
     </TextView>
-    <Button
-        android:layout_width="wrap_content"
+    <TableRow
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="공공데이터"
-        android:id="@+id/tourtest"></Button>
+        android:gravity="center_horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="공공데이터"
+            android:id="@+id/tourtest"></Button>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="최단경로"
+            android:id="@+id/path"></Button>
+    </TableRow>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:id="@+id/select"
+        android:textColor="#000000"
         >
     </TextView>
 </LinearLayout>

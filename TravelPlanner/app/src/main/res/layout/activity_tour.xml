@@ -6,7 +6,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="500px"
+        android:layout_height="300px"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="20dp"
         android:id="@+id/tourview">
@@ -17,9 +17,11 @@
         android:layout_height="wrap_content"
         android:text="get"
         android:id="@+id/getbtn"/>
-    <TextView
+
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tourtext"/>
+        android:layout_height="match_parent"
+        android:id="@+id/Alistview">
+    </ListView>
 
 </LinearLayout>

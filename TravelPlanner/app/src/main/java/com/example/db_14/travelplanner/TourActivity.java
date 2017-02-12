@@ -1,20 +1,14 @@
 package com.example.db_14.travelplanner;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.skp.Tmap.TMapView;
-
-import org.json.JSONObject;
-import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
-
-import java.io.BufferedInputStream;
-import java.net.URL;
 
 /**
  * Created by User on 2017-02-09.
@@ -22,12 +16,11 @@ import java.net.URL;
 
 public class TourActivity extends Activity {
 
-    String res;
     String APPKEY = "2cfca2bc-7f91-3031-b69d-3c7eed12970c";
-    String TOURKEY = "?ServiceKey=dx6Je9L%2FluhYWHKwoLx0GoEk7VvDKF0ABstzCLgfe7MJIFpFQ3EhtGGs1TfPkuqbScvzFxVxbLjcrMrztNFV2w%3D%3D&MobileOS=ETC&MobileApp=TravelPlanner&_type=json";
     FrameLayout mapLayout;
-    TextView tourtext;
+    ListView aListview;
     Button getbtn;
+    //ArrayList<HashMap<String, String>> areaList = new ArrayList<HashMap<String, String>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,75 +28,25 @@ public class TourActivity extends Activity {
         setContentView(R.layout.activity_tour);
 
         mapLayout = (FrameLayout) findViewById(R.id.tourview);
-        tourtext = (TextView) findViewById(R.id.tourtest);
         getbtn = (Button) findViewById(R.id.getbtn);
+        aListview = (ListView) findViewById(R.id.Alistview);
 
-        final TMapView tMapView = new TMapView(this);
+        final TMapView tMapView = new TMapView(this);   // tmap
 
-        tMapView.setSKPMapApiKey(APPKEY);
+        tMapView.setSKPMapApiKey(APPKEY);               // key 연결
         tMapView.setZoomLevel(10);
-        mapLayout.addView(tMapView);
+        mapLayout.addView(tMapView);                    // layout에 tmap 연결 (view 띄워줌)
 
         getbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    res = ApiJSON("http://api.visitkorea.or.kr/openapi/service/rest/KorService/" + "areaCode" + TOURKEY);
-                    tourtext.setText(res);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                URLConnector conn = new URLConnector("areaCode?");       // url커넥터에 요청 코드 보냄
+                Intent list = new Intent(TourActivity.this, ListActivity.class);    // 리스트뷰 띄우줌
+                list.putExtra("areaList", conn.getList());                          // 커넥터에 받아진 areacode 리스트 받아와서 보냄
+                startActivity(list);                                                // 액티비티 실행
             }
         });
-    }
 
-    public String ApiJSON(String url) {
-        String result = null;
-        try {
-            JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(url));
-            JSONObject json1 = (JSONObject) jsonObject.get("response");
-            JSONObject json2 = (JSONObject) json1.get("body");
-            JSONObject json3 = (JSONObject) json2.get("items");
-            JSONArray array = (JSONArray) json3.get("item");
-
-            for (int i = 0; i < array.size(); i++) {
-                JSONObject entity = (JSONObject) array.get(i);
-                String code, name, rnum;
-                code = (String) entity.get("code");
-                name = (String) entity.get("name");
-                rnum = (String) entity.get("rnum");
-                result += "code : " + code + "\n" + "name : " + name + "\n" + "rnum : " + rnum + "\n";
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            result = "fail";
-        }
-
-        return result;
-    }
-
-    private static String readUrl(String strUrl) {
-        BufferedInputStream reader = null;
-        URL url;
-        StringBuffer buffer;
-        try {
-            url = new URL(strUrl);
-            reader = new BufferedInputStream(url.openStream());
-            buffer = new StringBuffer();
-//ok
-            int i;
-            byte[] b = new byte[4096];
-
-            while ((i = reader.read(b)) != -1) {
-                buffer.append(new String(b, 0, i));
-            }
-            return buffer.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "fail";
-        }
     }
 }
 
