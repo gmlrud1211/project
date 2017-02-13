@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -14,30 +13,29 @@ import java.util.HashMap;
 
 public class SightViewActivity extends Activity {
 
-    TextView title, overview;
+    TextView title, overview, addr;
     ImageView image;
     String contentid;
-    ArrayList<HashMap<String, String>> sightinfo;
+    HashMap<String, String> sightinfo = new HashMap<String, String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_sight);
+
         title = (TextView) findViewById(R.id.sight_title);
         overview = (TextView) findViewById(R.id.sight_overview);
+        addr = (TextView) findViewById(R.id.sight_addr);
         image = (ImageView) findViewById(R.id.sight_image);
 
-        sightinfo = new ArrayList<HashMap<String, String>>();
-
-        contentid = getIntent().getStringExtra("contentid");
+        sightinfo = (HashMap<String, String>) getIntent().getSerializableExtra("sightInfo");
 
         URLConnector conn = new URLConnector();
-        conn.ApiJSON3("detailCommon?ServiceKey=dx6Je9L%2FluhYWHKwoLx0GoEk7VvDKF0ABstzCLgfe7MJIFpFQ3EhtGGs1TfPkuqbScvzFxVxbLjcrMrztNFV2w%3D%3D&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y&_type=json&contentid="+contentid);
-        sightinfo = conn.getList();
-
-        title.setText(sightinfo.get(0).get("title"));
-        overview.setText(sightinfo.get(0).get("overview"));
-
-        URLtoBItmap thread = new URLtoBItmap(sightinfo.get(0).get("firstimage"));
+        conn.APIsightInfo("detailCommon?", sightinfo.get("contentid"));
+        title.setText(sightinfo.get("title"));
+        overview.setText(conn.getList().get(0).get("overview"));
+        addr.setText(sightinfo.get("addr1")+", "+sightinfo.get("addr2"));
+        URLtoBItmap thread = new URLtoBItmap(sightinfo.get("firstimage"));
         thread.start();
 
         try {
@@ -47,8 +45,6 @@ public class SightViewActivity extends Activity {
         catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
     }
 }

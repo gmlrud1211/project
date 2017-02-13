@@ -40,7 +40,8 @@ public class TourActivity extends Activity {
         getbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                URLConnector conn = new URLConnector("areaCode?");       // url커넥터에 요청 코드 보냄
+                URLConnector conn = new URLConnector();       // url커넥터에 요청 코드 보냄
+                conn.APIareaCode("areaCode?");
                 Intent list = new Intent(TourActivity.this, ListActivity.class);    // 리스트뷰 띄우줌
                 list.putExtra("areaList", conn.getList());                          // 커넥터에 받아진 areacode 리스트 받아와서 보냄
                 startActivity(list);                                                // 액티비티 실행

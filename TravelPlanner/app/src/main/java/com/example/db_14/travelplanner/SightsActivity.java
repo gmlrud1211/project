@@ -34,7 +34,8 @@ public class SightsActivity extends Activity {
         listview = (ListView) findViewById(R.id.list_view);
         listview.setAdapter(adapter);
 
-        URLConnector conn = new URLConnector("areaBasedList?","areaCode="+areaCode, "&sigunguCode="+sigunguCode);
+        URLConnector conn = new URLConnector();
+        conn.APIsights("areaBasedList?", areaCode, sigunguCode);
         sightsList = conn.getList();
 
         adapter.addItem(sightsList);
@@ -43,7 +44,7 @@ public class SightsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(SightsActivity.this, SightViewActivity.class);
-                intent.putExtra("contentid", sightsList.get(i).get("contentid"));
+                intent.putExtra("sightInfo", sightsList.get(i));
                 startActivity(intent);
             }
         });

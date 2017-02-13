@@ -19,30 +19,16 @@ public class URLConnector {
 
     String base = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/";
     String TOURKEY = "ServiceKey=dx6Je9L%2FluhYWHKwoLx0GoEk7VvDKF0ABstzCLgfe7MJIFpFQ3EhtGGs1TfPkuqbScvzFxVxbLjcrMrztNFV2w%3D%3D&MobileOS=ETC&MobileApp=TravelPlanner&numOfRows=50&_type=json";
-    String reqCode, areaCode, sigunguCode;                             // 요청할 값 (areaCode 등등)
-    ArrayList<HashMap<String, String>> dList;   // 결과값 담아줄 arraylist
+    String sinfo_opt = "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y";
+    ArrayList<HashMap<String, String>> dList;  // 결과값 담아줄 arraylist
 
     public URLConnector() {
         dList = new ArrayList<HashMap<String, String>>();
     }
 
-    public URLConnector(String reqCode) {
-        this.reqCode = reqCode;
-        dList = new ArrayList<HashMap<String, String>>();   // arraylist 초기화
-        ApiJSON();                                          // json 파싱 함수 호출
-    }
+    public void APIareaCode(String reqCode) {
 
-    public URLConnector(String reqCode, String areaCode, String sigunguCode) {
-        this.reqCode = reqCode;
-        this.areaCode = areaCode;
-        this.sigunguCode = sigunguCode;
-        dList = new ArrayList<HashMap<String, String>>();   // arraylist 초기화
-        ApiJSON2();                                          // json 파싱 함수 호출
-    }
-
-    private void ApiJSON() {
-
-        HashMap<String, String> data;                       // jsonArray값 담아줄 hashmap
+        HashMap<String, String> data;
 
         try {
             JSONParser jsonParser = new JSONParser();
@@ -53,6 +39,9 @@ public class URLConnector {
             JSONArray array = (JSONArray) json3.get("item");
 
             for (int i = 0; i < array.size(); i++) {
+
+                data = new HashMap<String, String>();
+
                 JSONObject entity = (JSONObject) array.get(i);
                 String code, name;
                 code = entity.get("code").toString();
@@ -68,41 +57,41 @@ public class URLConnector {
         }
     }
 
-    private void ApiJSON2() {
+    public void APIsights(String reqCode, String areaCode, String sigunguCode) {
 
-        HashMap<String, String> data;                       // jsonArray값 담아줄 hashmap
+        HashMap<String, String> data;
 
         try {
             JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(base + reqCode + areaCode + sigunguCode + "&" +TOURKEY));   // url에서 json값 읽어옴
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(base + reqCode + "areaCode=" +areaCode + "&sigunguCode=" + sigunguCode + "&" +TOURKEY));   // url에서 json값 읽어옴
             JSONObject json1 = (JSONObject) jsonObject.get("response");
             JSONObject json2 = (JSONObject) json1.get("body");
             JSONObject json3 = (JSONObject) json2.get("items");
             JSONArray array = (JSONArray) json3.get("item");
 
             for (int i = 0; i < array.size(); i++) {
+
+                data = new HashMap<String, String>();
+
                 JSONObject entity = (JSONObject) array.get(i);
 
-                String addr1, addr2, firstimage, mapx, mapy, title, contentid;
+                String addr1, addr2, mapx, mapy, title, contentid, firstimage;
 
                 addr1 = entity.get("addr1").toString();
                 addr2 = entity.get("addr2").toString();
                 contentid = entity.get("contentid").toString();
-                firstimage = entity.get("firstimage").toString();
                 mapx = entity.get("mapx").toString();
                 mapy = entity.get("mapy").toString();
                 title = entity.get("title").toString();
-
-
-                data = new HashMap<String, String>();
+                firstimage = entity.get("firstimage").toString();
 
                 data.put("addr1", addr1);
                 data.put("addr2", addr2);
-                data.put("firstimage", firstimage);
                 data.put("mapx", mapx);
                 data.put("mapy", mapy);
                 data.put("title", title);
                 data.put("contentid", contentid);
+                data.put("firstimage", firstimage);
 
                 dList.add(data);
             }
@@ -112,43 +101,24 @@ public class URLConnector {
         }
     }
 
-    public void ApiJSON3(String strurl) {
+    public void APIsightInfo(String reqCode, String contentid) {
 
-        HashMap<String, String> data;                       // jsonArray값 담아줄 hashmap
+        HashMap<String, String> data;
 
         try {
             JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(base + strurl));   // url에서 json값 읽어옴
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(base + reqCode + TOURKEY + "&contentId=" + contentid + sinfo_opt));   // url에서 json값 읽어옴
             JSONObject json1 = (JSONObject) jsonObject.get("response");
             JSONObject json2 = (JSONObject) json1.get("body");
             JSONObject json3 = (JSONObject) json2.get("items");
-            JSONArray array = (JSONArray) json3.get("item");
-
-            for (int i = 0; i < array.size(); i++) {
-                JSONObject entity = (JSONObject) array.get(i);
-
-                String addr1, addr2, firstimage, mapx, mapy, title, contentid;
-
-                addr1 = entity.get("addr1").toString();
-                addr2 = entity.get("addr2").toString();
-                firstimage = entity.get("firstimage").toString();
-                mapx = entity.get("mapx").toString();
-                mapy = entity.get("mapy").toString();
-                title = entity.get("title").toString();
-                contentid = entity.get("contendid").toString();
+            JSONObject item = (JSONObject) json3.get("item");
 
                 data = new HashMap<String, String>();
 
-                data.put("addr1", addr1);
-                data.put("addr2", addr2);
-                data.put("firstimage", firstimage);
-                data.put("mapx", mapx);
-                data.put("mapy", mapy);
-                data.put("title", title);
-                data.put("contentid", contentid);
+                String overview = item.get("overview").toString();
+                data.put("overview", overview);
 
                 dList.add(data);
-            }
         }
         catch (Exception e) {
             Log.e("ERROR : ", e.getMessage());

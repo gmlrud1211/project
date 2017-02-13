@@ -36,7 +36,8 @@ public class SigunguActivity extends Activity {
         listview = (ListView) findViewById(R.id.list_view);
         listview.setAdapter(adapter);
 
-        URLConnector conn = new URLConnector("areaCode?areaCode="+areaCode+"&");
+        URLConnector conn = new URLConnector();
+        conn.APIareaCode("areaCode?areaCode="+areaCode+"&");
         sigunguList = conn.getList();
         adapter.addItem(sigunguList);
 
