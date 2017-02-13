@@ -22,6 +22,10 @@ public class URLConnector {
     String reqCode, areaCode, sigunguCode;                             // 요청할 값 (areaCode 등등)
     ArrayList<HashMap<String, String>> dList;   // 결과값 담아줄 arraylist
 
+    public URLConnector() {
+        dList = new ArrayList<HashMap<String, String>>();
+    }
+
     public URLConnector(String reqCode) {
         this.reqCode = reqCode;
         dList = new ArrayList<HashMap<String, String>>();   // arraylist 초기화
@@ -79,14 +83,16 @@ public class URLConnector {
             for (int i = 0; i < array.size(); i++) {
                 JSONObject entity = (JSONObject) array.get(i);
 
-                String addr1, addr2, firstimage, mapx, mapy, title;
+                String addr1, addr2, firstimage, mapx, mapy, title, contentid;
 
                 addr1 = entity.get("addr1").toString();
                 addr2 = entity.get("addr2").toString();
+                contentid = entity.get("contentid").toString();
                 firstimage = entity.get("firstimage").toString();
                 mapx = entity.get("mapx").toString();
                 mapy = entity.get("mapy").toString();
                 title = entity.get("title").toString();
+
 
                 data = new HashMap<String, String>();
 
@@ -96,6 +102,50 @@ public class URLConnector {
                 data.put("mapx", mapx);
                 data.put("mapy", mapy);
                 data.put("title", title);
+                data.put("contentid", contentid);
+
+                dList.add(data);
+            }
+        }
+        catch (Exception e) {
+            Log.e("ERROR : ", e.getMessage());
+        }
+    }
+
+    public void ApiJSON3(String strurl) {
+
+        HashMap<String, String> data;                       // jsonArray값 담아줄 hashmap
+
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(base + strurl));   // url에서 json값 읽어옴
+            JSONObject json1 = (JSONObject) jsonObject.get("response");
+            JSONObject json2 = (JSONObject) json1.get("body");
+            JSONObject json3 = (JSONObject) json2.get("items");
+            JSONArray array = (JSONArray) json3.get("item");
+
+            for (int i = 0; i < array.size(); i++) {
+                JSONObject entity = (JSONObject) array.get(i);
+
+                String addr1, addr2, firstimage, mapx, mapy, title, contentid;
+
+                addr1 = entity.get("addr1").toString();
+                addr2 = entity.get("addr2").toString();
+                firstimage = entity.get("firstimage").toString();
+                mapx = entity.get("mapx").toString();
+                mapy = entity.get("mapy").toString();
+                title = entity.get("title").toString();
+                contentid = entity.get("contendid").toString();
+
+                data = new HashMap<String, String>();
+
+                data.put("addr1", addr1);
+                data.put("addr2", addr2);
+                data.put("firstimage", firstimage);
+                data.put("mapx", mapx);
+                data.put("mapy", mapy);
+                data.put("title", title);
+                data.put("contentid", contentid);
 
                 dList.add(data);
             }

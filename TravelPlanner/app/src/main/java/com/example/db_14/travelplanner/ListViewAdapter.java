@@ -70,7 +70,13 @@ public class ListViewAdapter extends BaseAdapter {
 
         for(int i=0; i<datalist.size(); i++) {
             ListViewItem item = new ListViewItem();
-            item.setTitle(datalist.get(i).get("name"));
+            if(datalist.get(i).get("title")==null) {
+                item.setTitle(datalist.get(i).get("name"));
+            }
+            else
+            {
+                item.setTitle(datalist.get(i).get("title"));
+            }
             listViewItemList.add(item);
         }
     }

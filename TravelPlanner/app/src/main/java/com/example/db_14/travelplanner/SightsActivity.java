@@ -1,7 +1,10 @@
 package com.example.db_14.travelplanner;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -25,8 +28,8 @@ public class SightsActivity extends Activity {
         sigunguCode =  getIntent().getStringExtra("sigunguCode");
 
         final ListView listview ;
-        final SightsViewAdapter adapter;
-        adapter = new SightsViewAdapter();
+        final ListViewAdapter adapter;
+        adapter = new ListViewAdapter();
 
         listview = (ListView) findViewById(R.id.list_view);
         listview.setAdapter(adapter);
@@ -35,5 +38,14 @@ public class SightsActivity extends Activity {
         sightsList = conn.getList();
 
         adapter.addItem(sightsList);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(SightsActivity.this, SightViewActivity.class);
+                intent.putExtra("contentid", sightsList.get(i).get("contentid"));
+                startActivity(intent);
+            }
+        });
     }
 }
