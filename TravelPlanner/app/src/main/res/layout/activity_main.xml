@@ -37,6 +37,12 @@
             android:layout_height="wrap_content"
             android:text="최단경로"
             android:id="@+id/path"></Button>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지도 초기화"
+            android:id="@+id/reset"></Button>
     </TableRow>
 
     <TextView

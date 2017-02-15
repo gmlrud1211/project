@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.skp.Tmap.TMapData;
 import com.skp.Tmap.TMapMarkerItem;
@@ -26,7 +27,7 @@ public class MainActivity extends Activity {
     String APPKEY = "2cfca2bc-7f91-3031-b69d-3c7eed12970c";
     TextView select;
     TextView text;
-    Button tour, path;
+    Button tour, path, reset;
 
     ArrayList<TMapMarkerItem> markers;
     ArrayList<TMapPoint> points;
@@ -43,6 +44,7 @@ public class MainActivity extends Activity {
         select = (TextView)findViewById(R.id.select);
         tour = (Button)findViewById(R.id.tourtest);
         path = (Button)findViewById(R.id.path);
+        reset = (Button)findViewById(R.id.reset);
 
         markers = new ArrayList<TMapMarkerItem>();
         points = new ArrayList<TMapPoint>();
@@ -71,11 +73,11 @@ public class MainActivity extends Activity {
                 item.setVisible(TMapMarkerItem.VISIBLE);
                 Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.marker);
                 item.setIcon(bitmap);
-                item.setPosition((float)0.5, (float)1.0);
+                item.setPosition((float) 0.5, (float) 1.0);
                 // 마커 설정
                 markers.add(item);
                 points.add(tMapPoint);
-                tMapView.addMarkerItem("marker"+Integer.toString(id), markers.get(id));
+                tMapView.addMarkerItem("marker" + Integer.toString(id), markers.get(id));
                 id++;
 
             }
@@ -87,20 +89,49 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                TMapData tmapdata = new TMapData();
+                ArrayList<TMapPoint> opt = new ArrayList<TMapPoint>();
+                TMapPolyLine line = new TMapPolyLine();
+                TMapData data = new TMapData();
                 TMapPoint start, end;
-                start = points.get(0);
-                end = points.get(points.size()-1);
-                points.remove(0); points.remove(points.size()-1);
 
-                tmapdata.findPathDataWithType(TMapData.TMapPathType.CAR_PATH, start, end, points, 0, new TMapData.FindPathDataListenerCallback() {
-                    @Override
-                    public void onFindPathData(TMapPolyLine tMapPolyLine) {
-                        tMapPolyLine.setLineColor(Color.BLUE);
-                        tMapView.addTMapPolyLine("path",tMapPolyLine);
+                if (points.size() < 2) {
+                    Toast.makeText(getApplicationContext(), "출발지와 도착지, 경유지를 최소 2개 이상 선택해주세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                try {
+                    TourRouteManager tourRouteManager = new TourRouteManager(points);
+                    tourRouteManager.setOptimalRoute();
+
+                    opt = tourRouteManager.getOptimalRoute();
+
+                    if (opt.size() < 3) {
+                        line = data.findPathData(opt.get(0), opt.get(opt.size() - 1));
+                    } else {
+                        start = opt.get(0);
+                        end = opt.get(opt.size()-1);
+                        opt.remove(0); opt.remove(opt.size()-1);
+                        line = data.findMultiPointPathData(start, end, opt, 0);
                     }
-                });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                line.setLineWidth(2);
+                line.setOutLineWidth(0);
+                line.setLineColor(Color.MAGENTA);
 
+                tMapView.addTMapPolyLine("path",line);
+                points.clear();
+            }
+        });
+
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tMapView.removeAllMarkerItem();
+                tMapView.removeAllTMapPolyLine();
+                points.clear();
+                Toast.makeText(getApplicationContext(), "지도를 초기화했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }

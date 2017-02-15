@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class URLConnector {
 
     String base = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/";
-    String TOURKEY = "ServiceKey=dx6Je9L%2FluhYWHKwoLx0GoEk7VvDKF0ABstzCLgfe7MJIFpFQ3EhtGGs1TfPkuqbScvzFxVxbLjcrMrztNFV2w%3D%3D&MobileOS=ETC&MobileApp=TravelPlanner&numOfRows=50&_type=json";
+    String TOURKEY = "ServiceKey=dx6Je9L%2FluhYWHKwoLx0GoEk7VvDKF0ABstzCLgfe7MJIFpFQ3EhtGGs1TfPkuqbScvzFxVxbLjcrMrztNFV2w%3D%3D&MobileOS=AND&MobileApp=TravelPlanner&numOfRows=50&_type=json";
     String sinfo_opt = "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y";
     ArrayList<HashMap<String, String>> dList;  // 결과값 담아줄 arraylist
 
@@ -75,23 +75,14 @@ public class URLConnector {
 
                 JSONObject entity = (JSONObject) array.get(i);
 
-                String addr1, addr2, mapx, mapy, title, contentid, firstimage;
+                String title, contentid;
 
-                addr1 = entity.get("addr1").toString();
-                addr2 = entity.get("addr2").toString();
                 contentid = entity.get("contentid").toString();
-                mapx = entity.get("mapx").toString();
-                mapy = entity.get("mapy").toString();
                 title = entity.get("title").toString();
-                firstimage = entity.get("firstimage").toString();
 
-                data.put("addr1", addr1);
-                data.put("addr2", addr2);
-                data.put("mapx", mapx);
-                data.put("mapy", mapy);
+
                 data.put("title", title);
                 data.put("contentid", contentid);
-                data.put("firstimage", firstimage);
 
                 dList.add(data);
             }
@@ -113,10 +104,24 @@ public class URLConnector {
             JSONObject json3 = (JSONObject) json2.get("items");
             JSONObject item = (JSONObject) json3.get("item");
 
-                data = new HashMap<String, String>();
+            data = new HashMap<String, String>();
 
-                String overview = item.get("overview").toString();
-                data.put("overview", overview);
+            String addr1 = item.get("addr1").toString();
+            String overview = item.get("overview").toString();
+            String mapx = item.get("mapx").toString();
+            String mapy = item.get("mapy").toString();
+            String firstimage;
+
+            if (item.get("firstimage")!=null)
+                firstimage = item.get("firstimage").toString();
+            else
+                firstimage = "Image Not Found";
+
+            data.put("overview", overview);
+            data.put("firstimage", firstimage);
+            data.put("addr1", addr1);
+            data.put("mapx", mapx);
+            data.put("mapy", mapy);
 
                 dList.add(data);
         }

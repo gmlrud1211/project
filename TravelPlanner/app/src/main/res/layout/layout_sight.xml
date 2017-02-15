@@ -26,6 +26,17 @@
             android:layout_height="400px"
             android:id="@+id/sight_image"
             android:layout_marginBottom="20dp"/>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/sight_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="위치 보기"/>
+
+        </TableRow>
 
         <TextView
             android:layout_width="match_parent"

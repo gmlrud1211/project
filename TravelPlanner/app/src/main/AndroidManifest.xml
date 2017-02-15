@@ -23,6 +23,7 @@
         <activity android:name=".SigunguActivity"></activity>
         <activity android:name=".SightsActivity"></activity>
         <activity android:name=".SightViewActivity"></activity>
+        <activity android:name=".SightMapActivity"></activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
