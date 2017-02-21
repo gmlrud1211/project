@@ -59,8 +59,6 @@ public class LoginAction implements ServiceInterface{ // 로그인을 처리하�
 			
 			Fowardaction.setRedirect(true);
     		Fowardaction.setPath("./Login.jsp?msg=fail");
-    	   	   		
-    		
 		}
 		
 		return Fowardaction;
@@ -99,8 +97,7 @@ public class LoginAction implements ServiceInterface{ // 로그인을 처리하�
 		System.out.println(tour_list.toString());
 		
 		return tour_list;
-		
-	
+			
 	}
 
 }

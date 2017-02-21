@@ -48,19 +48,6 @@ img{border:0;}
 </head>
 <body>
 
-	<%
-		String msg = request.getParameter("msg");
-		if (msg != null) {
-			if (msg.equals("success")) // 메세지가 null값이 아닐때
-			{
-				response.setContentType("text/html;charset=euc-kr");
-				out.println("<script>");
-				out.println("alert('로그인에 성공하였습니다');");
-				out.println("</script>");
-			}
-		}
-	%>
-
 	<!--header-->
 	<div class="header">
 		<div class="container">
@@ -71,26 +58,11 @@ img{border:0;}
 			<div class="logo">
 				<h1> <a href="Index.jsp">Travel Planner</a> </h1>
 			</div>
-			<!-- <div class="logo2">
-				<h6>
-					<a href="Index.jsp">제주도</a>
-				</h6>
-			</div> -->
 			
-			<!--logo-->
-			<div class="top-nav">
-				<c:if test="${empty sessionScope.member}">
-					<!-- 로그인 표시 -->
-					<ul class="right-icons">
-						<li><a href="Login.jsp"><i class="glyphicon glyphicon-user"></i>Login</a></li>
-						<li><a href="Register.jsp">Register</a></li>
-					</ul>
-				</c:if>
-
 				<c:if test="${not empty sessionScope.member}">
 					<!-- 로그인 표시 -->
 					<ul class="right-icons">
-						<li><a href="Login.jsp"><i class="glyphicon glyphicon-user"> </i>${sessionScope.member.usr_id} </a></li>
+						<li><a href="Login.jsp"><i class="glyphicon glyphicon-user"> </i>${sessionScope.member.usr_id}님 환영합니다! </a></li>
 						<li><a href="Member.do?cmd=Logout"> Logout </a></li>
 						<li><a href="MyPlan.jsp">MyPage</a></li>
 					</ul>
@@ -135,110 +107,35 @@ img{border:0;}
 
 			</div>
 			<div class="clearfix"></div>
-		</div>
-	</div>
-	
-	
-	<!--//-->
-	<div class=" header-right">
-		<div class=" banner">
-			<div class="slider">
-				<div class="callbacks_container">
-					<ul class="rslides" id="slider">
-						<li>
-							<div class="banner1">
-								<div class="caption">
-									<h3>
-										<!-- Welcome to Korea! -->
-									</h3>
-								</div>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
 
-	<!--header-bottom-->
-	<!--//-->
-	<div class="banner-bottom-bottom">
-		<div class="resp-tabs-container">
-			<h2 class="resp-accordion resp-tab-active" role="tab"
-				aria-controls="tab_item-0">
-			</h2>
-			<div class="tab-1 resp-tab-content resp-tab-content-active"
-				aria-labelledby="tab_item-0" style="display: block">
-				<div class="facts">
-					<div class="login">
-						<form action="Search.do?cmd=searching" method="post">
-							<input type="text" name="keyword" value="원하는 관광지를 입력하세요"
-								onfocus="this.value = '';"
-								onblur="if (this.value == '') {this.value = '주소, 도시, 업종을 입력하세요';}">
-							<input type="submit" value="">
-						</form>
-					</div>
-				</div>
+
+
+<!--  header-bottom-->
+	<div class = "container-fluid">
+		<div class ="row-fluid">
+			<div id = "sidebar">
+			<ul>
+				<li><a href="Index.jsp">홈</a></li>
+				<li><a href="MyPlan.jsp">내 여행계획</a></li>
+				<li><a href="BillManager.jsp">지출 관리</a></li>
+				<li><a href="ReviewManager.jsp">리뷰</a></li>
+				<li><a href="#">마이 페이지</a></li>
+				<li><a href="#">설정</a></li>
+			</ul>
 			</div>
-		</div>
-	</div>
-	
 			
-
-
- 		<!-- tourAPI에서 제공하는 여행 추천코스 -->
- 	
- 		<div class = "content-grid">
- 			<form action="Recommend.do?cmd=Recommneding" method="post">
- 			<div class = "container">
-				<!-- 검색결과 표시지점 -->
+			<div class="span10">
 				
- 				<h3>Recommend course</h3>
- 					
-					<c:forEach var="vo" items="${sessionScope.resultTour}">
-						<div class="col-md-4 box_2">
-							<a href=Search.do?cmd=searchinfo&contentid=${vo.contentid}
-								class="mask"> <img class="img-responsive zoom-img"
-								src="${vo.firstimage }" width=420 height=316 alt="">
-							</a>
-							<div class="most-1">
-								<h5>${vo.title }</h5>
-								<p>${vo.address }</p>
-							</div>
-						</div>
-						</c:forEach>
- 			</div>
- 			</form>
- 		</div>
- 	
-		<!--<c:if test="${not empty sessionScope.resultTour }">-->
-			<div class="content-grid">
-				<div class="container">
-					<!-- 검색 결과 표시지점 -->
-
-					<h3>Search List</h3>
-
-					<c:forEach var="vo" items="${sessionScope.resultTour}">
-						<div class="col-md-4 box_2">
-							<a href=Search.do?cmd=searchinfo&contentid=${vo.contentid}
-								class="mask"> <img class="img-responsive zoom-img"
-								src="${vo.firstimage }" width=420 height=316 alt="">
-							</a>
-							<div class="most-1">
-								<h5>${vo.title }</h5>
-								<p>${vo.address }</p>
-							</div>
-						</div>
-
-
-					</c:forEach>
-					<div class="clearfix"></div>
-				</div>
-				<!-- 검색 결과 container end -->
 			</div>
-		<!--</c:if>-->
-
-
+			<div style="margin-top: 10px; margin-bottom: 10px;">
+			</div>
+	
+			</div>
+		</div>
+		
+		
+	
+	
 	<!--footer-->
 	<div class="footer">
 		<div class="footer-bottom">

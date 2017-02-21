@@ -120,7 +120,7 @@
 }
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>KOREA TOUR</title>
+<title>Travel Planner</title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css"
 	media="all" />
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -168,7 +168,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!--logo-->
 			<div class="logo">
 				<h1>
-					<a href="Index.jsp">KOREA TOUR</a>
+					<a href="Index.jsp">Travel Planner</a>
 				</h1>
 			</div>
 			<!--//logo-->
@@ -187,7 +187,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<li><a href="Login.jsp"><i
 								class="glyphicon glyphicon-user"> </i>${sessionScope.member.email}
 						</a></li>
-						<li><a href="Member.do?cmd=Logout">로그아웃</a></li>
+						<li><a href="Member.do?cmd=Logout">Logout</a></li>
 					</ul>
 				</c:if>
 				<div class="clearfix"></div>
@@ -297,7 +297,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class=" banner-buying">
 		<div class=" container">
 			<h3>
-				<span>BEST TOUR</span>
+				<span>tour info</span>
 			</h3>
 			<!---->
 			<div class="menu-right">
@@ -503,13 +503,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					</h2>
 				</div>
 				<div class="col-md-8 footer-class">
-					<p>2015 Korea Tour. All Rights Reserved | Design by songyi</p>
+					<p>2017 Travel Planner. All Rights Reserved | Design by heekyoung Shin & moonhee Kim</p>
 				</div>
 				<div class="clearfix"></div>
 			</div>
 		</div>
 	</div>
 	<!--//footer-->
-
 </body>
 </html>

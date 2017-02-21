@@ -1,4 +1,4 @@
-package Member.Controller;
+package Recommend.Controller;
 
 import java.io.IOException;
 
@@ -9,33 +9,33 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Member.Action.JoinAction;
-import Member.Action.LogOutAction;
-import Member.Action.LoginAction;
+import Recommend.Action.RecommendAction;
+import Recommend.Action.RecommendInfoAction;
 import ServiceManager.ServiceForward;
 import ServiceManager.ServiceInterface;
-
 /**
  * Servlet implementation class MemberController
  */
-@WebServlet("/Member")
-public class MemberController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
+@WebServlet("/Recommend")
+public class RecommendController extends HttpServlet {
+	private static final long serialVersionUID = 1L; 
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public MemberController() {
+	public RecommendController() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
 		// JSP 페이지 인코딩이 UTF-8이기 때문에 인코딩 설정
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
@@ -44,42 +44,33 @@ public class MemberController extends HttpServlet {
 		ServiceInterface action = null;
 
 		String cmd = request.getParameter("cmd");
-		System.out.println("멤버 컨트롤 분기 명령어 : " + cmd);
+		System.out.println("컨트롤 분기 명령어 : "+cmd);
+		String word = request.getParameter("tour");
 
-		switch (cmd) 
-		{
-			case "join" :
-				action = new JoinAction();
-				try {
-					forwardAction = action.execute(request, response);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			break;
-			
-			case "login" :
-				action = new LoginAction();
-				try {
-					forwardAction = action.execute(request, response);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			break;
-			
-			case "Logout" : // 로그아웃 액션 처리 
-				action = new LogOutAction();
-				
-				try 
-				{
-					forwardAction = action.execute(request, response);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		break;
-		} // switch end
+		switch (cmd) {
 
-		if (forwardAction != null) 
+		
+		case "Recommending":
+			action = new RecommendAction();
+			try {
+				forwardAction = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		
+		case "RecommendInfo":
+			action = new RecommendInfoAction();
+			try {
+				forwardAction = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		}
+		
+
+		if (forwardAction != null)
 		{
 			if (forwardAction.isRedirect()) 
 			{
@@ -90,27 +81,28 @@ public class MemberController extends HttpServlet {
 				RequestDispatcher dis = request.getRequestDispatcher(forwardAction.getPath());
 				dis.forward(request, response);
 			}
-		}// if end
-		
-
+		}
 	}
+	
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
-
+	
 }

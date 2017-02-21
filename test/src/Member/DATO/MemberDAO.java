@@ -25,9 +25,9 @@ public class MemberDAO  // 멤버 DB 접근처리 클래스
 		try
 		{
 			pstmt=conn.prepareStatement(SQL.toString());
-			pstmt.setObject(1, data.getName(), Types.VARCHAR);
-			pstmt.setObject(2, data.getUsr_id(), Types.VARCHAR);
-			pstmt.setObject(3, data.getUsr_pwd(), Types.VARCHAR);
+			pstmt.setObject(1, data.getUsr_id(), Types.VARCHAR);
+			pstmt.setObject(2, data.getUsr_pwd(), Types.VARCHAR);
+			pstmt.setObject(3, data.getName(), Types.VARCHAR);
 
 			int n=pstmt.executeUpdate();
 			
