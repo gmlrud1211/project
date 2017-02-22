@@ -18,10 +18,7 @@ import ServiceManager.ServiceForward;
 import ServiceManager.ServiceInterface;
 import Util.HttpClientGet;
 
-/**
- * 회원 가입을 처리 하는 클래스
- * @author Administrator
- */
+
 public class JoinAction implements ServiceInterface 
 {
 
@@ -47,7 +44,7 @@ public class JoinAction implements ServiceInterface
 		
 		if(joinCheck) // 회원 가입이 되었을때 
 		{
-			/** 회원 가입 정보, 로그인 정보는 세션 영역에 저장 한다. */
+			/** 회원 가입 정보, 로그인 정보는 세션 영역에 저장  */
 			// 세션 가져오기
 			HttpSession session = request.getSession();
 			// 사용자 정보 지정
@@ -57,7 +54,7 @@ public class JoinAction implements ServiceInterface
 			forward.setPath("./Index.jsp?msg=success");
 			
 		}
-		else // 회원 가입이 안되었을때
+		else // 회원 가입 안됫을때 
 		{
 			forward.setRedirect(false);
 			forward.setPath("./Register.jsp?msg=fail");
@@ -81,7 +78,7 @@ public class JoinAction implements ServiceInterface
 	
 		// 요청할 주소를 넣으세요
 		String url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?ServiceKey=8q31GAJwwNMz571K7eTL7BPpMIsivagfYAbl3xJeUqGhpmGE1V5Md5czX9eJ1aXXsHLMLRiB8XNtcyGLDst5xA%3D%3D"
-				+ "&keyword=" + keyword + "&MobileOS=ETC&MobileApp=KoreaTourismOrganization&_type=json";
+				+ "&keyword=" + keyword + "&MobileOS=ETC&MobileApp=Travel Planner&_type=json";
 		
 		System.out.println("요청주소 : "+url);
 		// 다음 서버로 부터 json 받아오기 

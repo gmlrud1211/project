@@ -87,8 +87,7 @@ public class MemberController extends HttpServlet {
 			} 
 			else 
 			{
-				RequestDispatcher dis = request
-						.getRequestDispatcher(forwardAction.getPath());
+				RequestDispatcher dis = request.getRequestDispatcher(forwardAction.getPath());
 				dis.forward(request, response);
 			}
 		}// if end

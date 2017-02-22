@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="#4ba8ff">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/logo_image"
+        android:layout_gravity="center_horizontal"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/logo_text"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"/>
+
+    <EditText
+        android:id="@+id/sign_id"
+        android:layout_width="300px"
+        android:layout_height="wrap_content"
+        android:hint="아이디를 입력하세요.">
+    </EditText>
+
+    <EditText
+        android:id="@+id/sign_pwd"
+        android:layout_width="300px"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="비밀번호를 입력하세요.">
+    </EditText>
+
+    <EditText
+        android:id="@+id/sign_name"
+        android:layout_width="300px"
+        android:layout_height="wrap_content"
+        android:hint="이름을 입력하세요.">
+    </EditText>
+
+    <Button
+        android:id="@+id/sign_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="확인"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/button_background" />
+</LinearLayout>

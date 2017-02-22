@@ -56,109 +56,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="container">
 			<!--logo-->
 			<div class="logo">
-				<h1>
-					<a href="Index.jsp">KOREA TOUR</a>
-				</h1>
-			</div>
+				<h1 id="logoUI"><img src="images/logoUI.png" width="100"height="100"/> </h1> </div>
+			<div class="logo"> <h1> <a href="Index.jsp">Travel Planner</a> </h1></div>
+			
 			<!--//logo-->
 			<div class="top-nav">
-				<c:if test="${empty sessionScope.member}">
-					<!-- 로그인 표시 -->
-					<ul class="right-icons">
-						<li><a href="Login.jsp"><i
-								class="glyphicon glyphicon-user"> </i>Login</a></li>
-					</ul>
-				</c:if>
 
 				<c:if test="${not empty sessionScope.member}">
 					<!-- 로그인 표시 -->
 					<ul class="right-icons">
 						<li><a href="Login.jsp"><i
-								class="glyphicon glyphicon-user"> </i>${sessionScope.member.usr_id}
+								class="glyphicon glyphicon-user"> </i>${sessionScope.member.usr_id}님 환영합니다!
 						</a></li>
 						<li><a href="Member.do?cmd=Logout">로그아웃</a></li>
 					</ul>
 				</c:if>
 				<div class="clearfix"></div>
-				<!---pop-up-box---->
-				<link href="css/popuo-box.css" rel="stylesheet" type="text/css"
-					media="all" />
-				<script src="js/jquery.magnific-popup.js" type="text/javascript"></script>
-				<!---//pop-up-box---->
-				<div id="small-dialog" class="mfp-hide">
-					<!----- tabs-box ---->
-					<div class="sap_tabs">
-						<div id="horizontalTab"
-							style="display: block; width: 100%; margin: 0px;">
-							<ul class="resp-tabs-list">
-								<li class="resp-tab-item " aria-controls="tab_item-0" role="tab"><span>All
-										Homes</span></li>
-								<li class="resp-tab-item" aria-controls="tab_item-1" role="tab"><span>For
-										Sale</span></li>
-								<li class="resp-tab-item" aria-controls="tab_item-2" role="tab"><span>For
-										Rent</span></li>
-								<div class="clearfix"></div>
-							</ul>
-							<div class="resp-tabs-container">
-								<h2 class="resp-accordion resp-tab-active" role="tab"
-									aria-controls="tab_item-0">
-									<span class="resp-arrow"></span>All Homes
-								</h2>
-								<div class="tab-1 resp-tab-content resp-tab-content-active"
-									aria-labelledby="tab_item-0" style="display: block">
-									<div class="facts">
-										<div class="login">
-											<input type="text"
-												value="Search Address, Neighborhood, City or Zip"
-												onfocus="this.value = '';"
-												onblur="if (this.value == '') {this.value = 'Search Address, Neighborhood, City or Zip';}">
-											<input type="submit" value="">
-										</div>
-									</div>
-								</div>
-								<h2 class="resp-accordion" role="tab" aria-controls="tab_item-1">
-									<span class="resp-arrow"></span>For Sale
-								</h2>
-								<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-1">
-									<div class="facts">
-										<div class="login">
-											<input type="text"
-												value="Search Address, Neighborhood, City or Zip"
-												onfocus="this.value = '';"
-												onblur="if (this.value == '') {this.value = 'Search Address, Neighborhood, City or Zip';}">
-											<input type="submit" value="">
-										</div>
-									</div>
-								</div>
-								<h2 class="resp-accordion" role="tab" aria-controls="tab_item-2">
-									<span class="resp-arrow"></span>For Rent
-								</h2>
-								<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-2">
-									<div class="facts">
-										<div class="login">
-											<input type="text"
-												value="Search Address, Neighborhood, City or Zip"
-												onfocus="this.value = '';"
-												onblur="if (this.value == '') {this.value = 'Search Address, Neighborhood, City or Zip';}">
-											<input type="submit" value="">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<script src="js/easyResponsiveTabs.js" type="text/javascript"></script>
-						<script type="text/javascript">
-							$(document).ready(function() {
-								$('#horizontalTab').easyResponsiveTabs({
-									type : 'default', //Types: default, vertical, accordion           
-									width : 'auto', //auto or any width like 600px
-									fit : true
-								// 100% fit in a container
-								});
-							});
-						</script>
-					</div>
-				</div>
+				
 				<script>
 					$(document).ready(function() {
 						$('.popup-with-zoom-anim').magnificPopup({
@@ -181,6 +95,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="clearfix"></div>
 		</div>
 	</div>
+	
+
 	<!--//-->
 	<div class=" banner-buying">
 		<div class=" container">
