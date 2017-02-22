@@ -7,21 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by a0104 on 2017-02-13.
@@ -30,7 +18,7 @@ import java.util.List;
 public class SightViewActivity extends Activity {
 
     TextView title, overview, addr;
-    Button map, bookmark;
+    Button map;
     ImageView image;
     String ovStr;
     HashMap<String, String> sightinfo = new HashMap<String, String>();
@@ -46,7 +34,6 @@ public class SightViewActivity extends Activity {
         addr = (TextView) findViewById(R.id.sight_addr);
         image = (ImageView) findViewById(R.id.sight_image);
         map = (Button) findViewById(R.id.sight_map);
-        bookmark = (Button) findViewById(R.id.bookmark);
 
         sightinfo = (HashMap<String, String>) getIntent().getSerializableExtra("sightInfo");
 
@@ -81,37 +68,5 @@ public class SightViewActivity extends Activity {
             }
         });
 
-        bookmark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try{
-                    HttpClient httpClient = new DefaultHttpClient();
-                    HttpPost httpPost = new HttpPost("http://52.79.131.13/db_insert.php");
-
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-                    String query = "insert into bookmark (usrid, p_code) values ('moonhee', "+sightinfo.get("contentid")+")";
-                    nameValuePairs.add(new BasicNameValuePair("query", query));
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                    HttpResponse response = httpClient.execute(httpPost);
-
-                    ResponseHandler<String> responseHandler = new BasicResponseHandler();
-
-                    final String res = httpClient.execute(httpPost, responseHandler);
-
-                    if(res.equalsIgnoreCase("success"))
-                    {
-                        Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
-                        // db에서 res값을 보내지 않아 처리 불가능 문제 확인 필요
-                    }
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 
 import com.skp.Tmap.TMapView;
 
@@ -17,9 +18,10 @@ public class TourActivity extends Activity {
 
     String APPKEY = "2cfca2bc-7f91-3031-b69d-3c7eed12970c";
     FrameLayout mapLayout;
-    Button getbtn, plan;
+    ListView aListview;
+    Button getbtn;
     //ArrayList<HashMap<String, String>> areaList = new ArrayList<HashMap<String, String>>();
-    String id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +29,8 @@ public class TourActivity extends Activity {
 
         mapLayout = (FrameLayout) findViewById(R.id.tourview);
         getbtn = (Button) findViewById(R.id.getbtn);
-        plan = (Button) findViewById(R.id.plan);
-        id = getIntent().getStringExtra("usrid");
+        aListview = (ListView) findViewById(R.id.Alistview);
+
         final TMapView tMapView = new TMapView(this);   // tmap
 
         tMapView.setSKPMapApiKey(APPKEY);               // key 연결
@@ -46,15 +48,6 @@ public class TourActivity extends Activity {
             }
         });
 
-
-        plan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(TourActivity.this, UserPlanActivity.class);
-                intent.putExtra("usrid", id);
-                startActivity(intent);
-            }
-        });
     }
 }
 

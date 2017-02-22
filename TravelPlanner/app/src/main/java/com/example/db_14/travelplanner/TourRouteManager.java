@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by db-14 on 2017. 2. 14..
  */
 public class TourRouteManager {
-
+    TMapPolyLine opt_pathline;
     ArrayList<TMapPoint> base_path, opt_path;
     int n;
     boolean visit[];
@@ -23,6 +23,7 @@ public class TourRouteManager {
         visit = new boolean[n];
         data = new double[n][n];
         opt_path = new ArrayList<TMapPoint>();
+        opt_pathline = new TMapPolyLine();
 
         for(int i=0; i<n; i++)
         {
@@ -90,13 +91,12 @@ public class TourRouteManager {
             opt_path.add(base_path.get(k));
 
             min = 1000000000;
-            find = false;
+            find=false;
         }
 
     }
 
     public ArrayList<TMapPoint> getOptimalRoute() throws Exception {
-
         return opt_path;
     }
 

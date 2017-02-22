@@ -53,7 +53,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent tour = new Intent(MainActivity.this, TourActivity.class);
-                tour.putExtra("usrid", usrid);
                 startActivity(tour);
             }
         });
@@ -66,11 +65,6 @@ public class MainActivity extends Activity {
         tMapView.setZoomLevel(15);
         FrameLayout mapLayout = (FrameLayout) findViewById(R.id.mapview);
         mapLayout.addView(tMapView);
-
-        Bitmap s_marker = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.start_marker);
-        Bitmap e_marker = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.end_marker);
-        tMapView.setTMapPathIcon(s_marker, e_marker);
-
         tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
             @Override
             public void onLongPressEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint) {
@@ -111,22 +105,23 @@ public class MainActivity extends Activity {
 
                     opt = tourRouteManager.getOptimalRoute();
 
-                    for(int i=0; i<opt.size(); i++)
-                    {
-                        line.addLinePoint(opt.get(i));
+                    if (opt.size() < 3) {
+                        line = data.findPathData(opt.get(0), opt.get(opt.size() - 1));
+                    } else {
+                        start = opt.get(0);
+                        end = opt.get(opt.size()-1);
+                        opt.remove(0); opt.remove(opt.size()-1);
+                        line = data.findMultiPointPathData(start, end, opt, 0);
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                line.setLineWidth(6);
+                line.setLineWidth(2);
                 line.setOutLineWidth(0);
-                line.setLineColor(Color.RED);
+                line.setLineColor(Color.MAGENTA);
 
-                tMapView.addTMapPath(line);
-
+                tMapView.addTMapPolyLine("path",line);
                 points.clear();
-                markers.clear();
             }
         });
 
@@ -135,10 +130,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 tMapView.removeAllMarkerItem();
                 tMapView.removeAllTMapPolyLine();
-                tMapView.removeTMapPath();
                 points.clear();
-                markers.clear();
-                id=0;
                 Toast.makeText(getApplicationContext(), "지도를 초기화했습니다.", Toast.LENGTH_SHORT).show();
             }
         });

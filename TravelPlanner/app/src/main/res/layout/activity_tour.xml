@@ -17,10 +17,11 @@
         android:layout_height="wrap_content"
         android:text="get"
         android:id="@+id/getbtn"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="일정"
-        android:id="@+id/plan"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/Alistview">
+    </ListView>
 
 </LinearLayout>

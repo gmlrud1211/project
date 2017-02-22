@@ -24,8 +24,6 @@
         <activity android:name=".SightsActivity"></activity>
         <activity android:name=".SightViewActivity"></activity>
         <activity android:name=".SightMapActivity"></activity>
-        <activity android:name=".UserPlanActivity"></activity>
-
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
