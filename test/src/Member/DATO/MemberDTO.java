@@ -1,14 +1,15 @@
 package Member.DATO;
 
 public class MemberDTO {
-	String name; 	// 이름
 	String usr_id; 		// 아이디
 	String usr_pwd; 	// 비밀번호
+	String name; 	// 이름
 
-	public MemberDTO(String name, String usr_id, String usr_pwd) {
-		this.name = name;
+	public MemberDTO( String usr_id, String usr_pwd, String name) {
+		
 		this.usr_id = usr_id;
 		this.usr_pwd = usr_pwd;
+		this.name = name;
 	}
 
 	public MemberDTO(String usr_id, String usr_pwd) {
@@ -45,9 +46,9 @@ public class MemberDTO {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		
-		sb.append("이름 : "+name);
 		sb.append(" 아이디 : "+usr_id);
 		sb.append(" 비밀번호 : "+usr_pwd);
+		sb.append("이름 : "+name);
 		return sb.toString();
 	}
 

@@ -62,21 +62,6 @@ img{border:0;}
 	%>
 
 	<!--header-->
-	<div class="navigation">
-		<div class="container-fluid">
-			<nav class="pull">
-			<ul>
-				<li><a href="Index.jsp">Home</a></li>
-				<li><a href="about.html">About Us</a></li>
-				<li><a href="blog.html">Blog</a></li>
-				<li><a href="terms.html">Terms</a></li>
-				<li><a href="privacy.html">Privacy</a></li>
-				<li><a href="contact.html">Contact</a></li>
-			</ul>
-			</nav>
-		</div>
-	</div>
-
 	<div class="header">
 		<div class="container">
 			<!--logo-->
@@ -105,80 +90,18 @@ img{border:0;}
 				<c:if test="${not empty sessionScope.member}">
 					<!-- 로그인 표시 -->
 					<ul class="right-icons">
-						<li><a href="Login.jsp"><i
-								class="glyphicon glyphicon-user"> </i>${sessionScope.member.usr_id}
-						</a></li>
-						<li><a href="Member.do?cmd=Logout">로그아웃</a></li>
+						<li><a href="Login.jsp"><i class="glyphicon glyphicon-user"> </i>${sessionScope.member.usr_id} </a></li>
+						<li><a href="Member.do?cmd=Logout"> Logout </a></li>
+						<li><a href="MyPlan.jsp">MyPage</a></li>
 					</ul>
 				</c:if>
 				
-				<div class="clearfix"></div>
 				<!---pop-up-box---->
 
 				<link href="css/popuo-box.css" rel="stylesheet" type="text/css" smedia="all" />
 				<script src="js/jquery.magnific-popup.js" type="text/javascript"></script>
 				<!---//pop-up-box---->
 				<div id="small-dialog" class="mfp-hide">
-					<!----- tabs-box ---->
-					<div class="sap_tabs">
-						<div id="horizontalTab"
-							style="display: block; width: 100%; margin: 0px;">
-							<ul class="resp-tabs-list">
-								<li class="resp-tab-item " aria-controls="tab_item-0" role="tab"><span>All
-										Homes</span></li>
-								<li class="resp-tab-item" aria-controls="tab_item-1" role="tab"><span>For
-										Sale</span></li>
-								<li class="resp-tab-item" aria-controls="tab_item-2" role="tab"><span>For
-										Rent</span></li>
-								<div class="clearfix"></div>
-							</ul>
-							<div class="resp-tabs-container">
-								<h2 class="resp-accordion resp-tab-active" role="tab"
-									aria-controls="tab_item-0">
-									<span class="resp-arrow"></span>All Homes
-								</h2>
-								<div class="tab-1 resp-tab-content resp-tab-content-active"
-									aria-labelledby="tab_item-0" style="display: block">
-									<div class="facts">
-										<div class="login">
-											<input type="text"
-												value="Search Address, Neighborhood, City or Zip"
-												onfocus="this.value = '';"
-												onblur="if (this.value == '') {this.value = 'Search Address, Neighborhood, City or Zip';}">
-											<input type="submit" value="">
-										</div>
-									</div>
-								</div>
-								<h2 class="resp-accordion" role="tab" aria-controls="tab_item-1">
-									<span class="resp-arrow"></span>For Sale
-								</h2>
-								<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-1">
-									<div class="facts">
-										<div class="login">
-											<input type="text"
-												value="Search Address, Neighborhood, City or Zip"
-												onfocus="this.value = '';"
-												onblur="if (this.value == '') {this.value = 'Search Address, Neighborhood, City or Zip';}">
-											<input type="submit" value="">
-										</div>
-									</div>
-								</div>
-								<h2 class="resp-accordion" role="tab" aria-controls="tab_item-2">
-									<span class="resp-arrow"></span>For Rent
-								</h2>
-								<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-2">
-									<div class="facts">
-										<div class="login">
-											<input type="text"
-												value="Search Address, Neighborhood, City or Zip"
-												onfocus="this.value = '';"
-												onblur="if (this.value == '') {this.value = 'Search Address, Neighborhood, City or Zip';}">
-											<input type="submit" value="">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
 						<script src="js/easyResponsiveTabs.js" type="text/javascript"></script>
 						<script type="text/javascript">
 							$(document).ready(function() {
@@ -214,6 +137,8 @@ img{border:0;}
 			<div class="clearfix"></div>
 		</div>
 	</div>
+	
+	
 	<!--//-->
 	<div class=" header-right">
 		<div class=" banner">
@@ -224,9 +149,7 @@ img{border:0;}
 							<div class="banner1">
 								<div class="caption">
 									<h3>
-										<!--
-										
-										  Welcome to Korea! -->
+										<!-- Welcome to Korea! -->
 									</h3>
 								</div>
 							</div>
@@ -243,7 +166,6 @@ img{border:0;}
 		<div class="resp-tabs-container">
 			<h2 class="resp-accordion resp-tab-active" role="tab"
 				aria-controls="tab_item-0">
-				<span class="resp-arrow"></span>All Homes
 			</h2>
 			<div class="tab-1 resp-tab-content resp-tab-content-active"
 				aria-labelledby="tab_item-0" style="display: block">
@@ -260,25 +182,20 @@ img{border:0;}
 			</div>
 		</div>
 	</div>
+	
+			
 
 
-	<!--//header-bottom-->
-
-
-	<!--//header-->
-	<!--content-->
-<!-- 
-	<div class="content">
-		<!--  로그인 되었을때 사는곳 주변 관광지 -->
-<!-- 	<c:if test="${not empty sessionScope.cityList}">
-			<!-- 검색 결과가 있을때만 표시 한다. -->
-<!-- 			<div class="content-grid">
-				<div class="container">
-					<!-- 검색 결과 표시지점 -->
-
-	<!-- 				<h3>추천 코스</h3>
-
-					<c:forEach var="vo" items="${sessionScope.cityList}">
+ 		<!-- tourAPI에서 제공하는 여행 추천코스 -->
+ 	
+ 		<div class = "content-grid">
+ 			<form action="Recommend.do?cmd=Recommneding" method="post">
+ 			<div class = "container">
+				<!-- 검색결과 표시지점 -->
+				
+ 				<h3>Recommend course</h3>
+ 					
+					<c:forEach var="vo" items="${sessionScope.resultTour}">
 						<div class="col-md-4 box_2">
 							<a href=Search.do?cmd=searchinfo&contentid=${vo.contentid}
 								class="mask"> <img class="img-responsive zoom-img"
@@ -289,56 +206,17 @@ img{border:0;}
 								<p>${vo.address }</p>
 							</div>
 						</div>
-
-
-					</c:forEach>
-
-					<div class="clearfix"></div>
-				</div>
-				<!-- 검색 결과 container end -->
-<!-- 			</div>
-		</c:if> 
- -->
- 
- 
-		<!-- 로그인 되었을때 취미를 통한 검색  -->
-<!-- 
-		<c:if test="${not empty sessionScope.hobbyList}">
-			<div class="content-grid">
-				<div class="container">
-					<!-- 검색 결과 표시지점 -->
-
-<!--					<h3>사용자 여행후기</h3>
-
-					<c:forEach var="vo" items="${sessionScope.hobbyList}">
-						<div class="col-md-4 box_2">
-							<a href=Search.do?cmd=searchinfo&contentid=${vo.contentid}
-								class="mask"> <img class="img-responsive zoom-img"
-								src="${vo.firstimage }" width=420 height=316 alt="">
-							</a>
-							<div class="most-1">
-								<h5>${vo.title }</h5>
-								<p>${vo.address }</p>
-							</div>
-						</div>
-
-
-					</c:forEach>
-
-					<div class="clearfix"></div>
-				</div>
-				<!-- 검색 결과 container end -->
-<!-- 			</div>
-		</c:if>	
- -->
- 
+						</c:forEach>
+ 			</div>
+ 			</form>
+ 		</div>
+ 	
 		<!--<c:if test="${not empty sessionScope.resultTour }">-->
-			<!-- 검색 결과가 있을때만 표시 한다. -->
 			<div class="content-grid">
 				<div class="container">
 					<!-- 검색 결과 표시지점 -->
 
-					<h3>Recommend List</h3>
+					<h3>Search List</h3>
 
 					<c:forEach var="vo" items="${sessionScope.resultTour}">
 						<div class="col-md-4 box_2">
@@ -354,7 +232,6 @@ img{border:0;}
 
 
 					</c:forEach>
-
 					<div class="clearfix"></div>
 				</div>
 				<!-- 검색 결과 container end -->

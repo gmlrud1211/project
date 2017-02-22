@@ -24,6 +24,16 @@
     <servlet-name>Search</servlet-name>
     <url-pattern>/Search.do</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>Recommend</servlet-name>
+    <servlet-class>Recommend.Controller.RecommendController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Recommend</servlet-name>
+    <url-pattern>/Recommend.do</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
     <servlet-name>Member</servlet-name>
     <servlet-class>Member.Controller.MemberController</servlet-class>
