@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_myhome"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_myplan"
+            android:title="내 여행계획" />
+        <item
+            android:id="@+id/nav_cost"
+            android:title="지출관리" />
+        <item
+            android:id="@+id/nav_myreview"
+            android:title="내 리뷰" />
+        <item
+            android:id="@+id/nav_mypage"
+            android:title="마이페이지" />
+        <item
+            android:id="@+id/nav_setting"
+            android:title="설정" />
+    </group>
+</menu>
