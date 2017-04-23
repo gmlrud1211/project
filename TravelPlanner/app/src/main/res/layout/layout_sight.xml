@@ -8,7 +8,7 @@
         android:id="@+id/sight_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="15pt"
+        android:textSize="30dp"
         android:background="#4ba8ff"
         android:textColor="#ffffff"
         android:gravity="center_horizontal"/>

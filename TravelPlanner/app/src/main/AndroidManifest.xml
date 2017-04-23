@@ -2,8 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.db_14.travelplanner">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
+        android:name=".customFont"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -15,22 +21,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".SignupActivity"></activity>
-        <activity android:name=".TourActivity"></activity>
-        <activity android:name=".ListActivity"></activity>
-        <activity android:name=".SigunguActivity"></activity>
-        <activity android:name=".SightsActivity"></activity>
-        <activity android:name=".SightViewActivity"></activity>
-        <activity android:name=".SightMapActivity"></activity>
-        <activity android:name=".UserPlanActivity"></activity>
-
+        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignupActivity" />
+        <activity android:name=".TourActivity" />
+        <activity android:name=".ListActivity" />
+        <activity android:name=".SigunguActivity" />
+        <activity android:name=".SightsActivity" />
+        <activity android:name=".SightViewActivity" />
+        <activity android:name=".SightMapActivity" />
+        <activity android:name=".UserPlanActivity" />
+        <activity
+            android:name=".MainUIActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".PlanAddActivity" />
+        <activity android:name=".FontActivity"></activity>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
 
 </manifest>

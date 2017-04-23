@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/plan_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="제목을 입력하세요."
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="13dp" />
+
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인원수"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginLeft="26dp"
+        android:layout_marginStart="26dp"
+        android:layout_alignBottom="@+id/people"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/people"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/tvLabelFromDate"
+        android:layout_alignLeft="@+id/tvFromDate"
+        android:layout_alignStart="@+id/tvFromDate" />
+
+    <TextView
+        android:id="@+id/memo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Memo"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_alignEnd="@+id/textView1" />
+
+    <EditText
+        android:id="@+id/memoinputs"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:inputType="text|textMultiLine"
+        android:minLines="3"
+        android:layout_below="@+id/memo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp" />
+
+
+    <TextView
+        android:id="@+id/tvLabelToDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="시작날짜"
+        android:textStyle="bold"
+        android:layout_alignBaseline="@+id/tvToDate"
+        android:layout_alignBottom="@+id/tvToDate"
+        android:layout_alignLeft="@+id/tvLabelFromDate"
+        android:layout_alignStart="@+id/tvLabelFromDate" />
+
+    <TextView
+        android:id="@+id/tvToDate"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        android:background="@drawable/date_selector"
+        android:text="Click to add To date"
+        android:layout_below="@+id/plan_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+    <TextView
+        android:id="@+id/tvLabelFromDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="도착날짜"
+        android:textStyle="bold"
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/tvToDate"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_alignEnd="@+id/textView1" />
+
+    <TextView
+        android:id="@+id/tvFromDate"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/date_selector"
+        android:text="Click to add From date"
+        android:layout_alignBaseline="@+id/tvLabelFromDate"
+        android:layout_alignBottom="@+id/tvLabelFromDate"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>

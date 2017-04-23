@@ -1,16 +1,22 @@
 package com.example.db_14.travelplanner;
 
+import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.StrictMode;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -34,8 +40,7 @@ public class LoginActivity extends Activity {
     HttpResponse response;
     HttpClient httpClient;
     List<NameValuePair> nameValuePairs;
-    ProgressDialog dialog = null;
-
+    Dialog dialog =  null;
     EditText usr_id;
     EditText usr_pwd;
     Button login;
@@ -53,6 +58,9 @@ public class LoginActivity extends Activity {
         usr_pwd = (EditText)findViewById(R.id.user_pwd);
         signup = (Button)findViewById(R.id.signup);
         login = (Button)findViewById(R.id.login);
+        dialog = new Dialog(this, R.style.MyDialog);
+        dialog.setCancelable(true);
+        dialog.addContentView(new ProgressBar(this), new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +73,7 @@ public class LoginActivity extends Activity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog = ProgressDialog.show(LoginActivity.this, "", "Validating user...", true);
+                dialog.show();
 
                 new Thread(new Runnable() {
                     @Override
@@ -111,7 +119,7 @@ public class LoginActivity extends Activity {
                     }
                 });
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MainUIActivity.class);
                 intent.putExtra("USRID", usr_id.getText().toString());
                 startActivity(intent);
                 finish();
@@ -125,5 +133,10 @@ public class LoginActivity extends Activity {
             dialog.dismiss();
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }

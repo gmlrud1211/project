@@ -1,11 +1,14 @@
 package com.example.db_14.travelplanner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +19,7 @@ import java.util.HashMap;
 
 public class SigunguActivity extends Activity {
 
-    String areaCode;
+    String areaCode, contenttypeid;
     ArrayList<HashMap<String, String>> sigunguList = new ArrayList<HashMap<String, String>>();
 
     @Override
@@ -25,7 +28,7 @@ public class SigunguActivity extends Activity {
         setContentView(R.layout.activity_list);
 
         areaCode =  getIntent().getStringExtra("areaCode");
-
+        contenttypeid = getIntent().getStringExtra("ContentTypeId");
         final ListView listview ;
         final ListViewAdapter adapter;
 
@@ -47,8 +50,14 @@ public class SigunguActivity extends Activity {
                 Intent intent = new Intent(SigunguActivity.this, SightsActivity.class);
                 intent.putExtra("areaCode", areaCode);
                 intent.putExtra("sigunguCode", sigunguList.get(i).get("code"));
+                intent.putExtra("ContentTypeId", contenttypeid);
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }

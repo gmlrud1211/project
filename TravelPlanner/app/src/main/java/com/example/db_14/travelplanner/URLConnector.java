@@ -57,13 +57,14 @@ public class URLConnector {
         }
     }
 
-    public void APIsights(String reqCode, String areaCode, String sigunguCode) {
+    public void APIsights(String reqCode, String areaCode, String sigunguCode, String contentTypeid) {
 
         HashMap<String, String> data;
 
         try {
             JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(base + reqCode + "areaCode=" +areaCode + "&sigunguCode=" + sigunguCode + "&" +TOURKEY));   // url에서 json값 읽어옴
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(base + reqCode + "areaCode=" +areaCode + "&sigunguCode=" +
+                    sigunguCode + "&contentTypeId=" + contentTypeid + "&" +TOURKEY));   // url에서 json값 읽어옴
             JSONObject json1 = (JSONObject) jsonObject.get("response");
             JSONObject json2 = (JSONObject) json1.get("body");
             JSONObject json3 = (JSONObject) json2.get("items");

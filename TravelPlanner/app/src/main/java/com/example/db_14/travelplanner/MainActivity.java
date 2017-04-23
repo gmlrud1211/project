@@ -1,6 +1,7 @@
 package com.example.db_14.travelplanner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +19,7 @@ import com.skp.Tmap.TMapPOIItem;
 import com.skp.Tmap.TMapPoint;
 import com.skp.Tmap.TMapPolyLine;
 import com.skp.Tmap.TMapView;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.util.ArrayList;
 
@@ -27,7 +29,7 @@ public class MainActivity extends Activity {
     String APPKEY = "2cfca2bc-7f91-3031-b69d-3c7eed12970c";
     TextView select;
     TextView text;
-    Button tour, path, reset;
+    Button tour, path, reset, mainui;
 
     ArrayList<TMapMarkerItem> markers;
     ArrayList<TMapPoint> points;
@@ -45,6 +47,7 @@ public class MainActivity extends Activity {
         tour = (Button)findViewById(R.id.tourtest);
         path = (Button)findViewById(R.id.path);
         reset = (Button)findViewById(R.id.reset);
+        mainui = (Button)findViewById(R.id.mainui);
 
         markers = new ArrayList<TMapMarkerItem>();
         points = new ArrayList<TMapPoint>();
@@ -55,6 +58,15 @@ public class MainActivity extends Activity {
                 Intent tour = new Intent(MainActivity.this, TourActivity.class);
                 tour.putExtra("usrid", usrid);
                 startActivity(tour);
+            }
+        });
+
+        mainui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent main = new Intent(MainActivity.this, MainUIActivity.class);
+                main.putExtra("usrid", usrid);
+                startActivity(main);
             }
         });
 
@@ -142,5 +154,10 @@ public class MainActivity extends Activity {
                 Toast.makeText(getApplicationContext(), "지도를 초기화했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }

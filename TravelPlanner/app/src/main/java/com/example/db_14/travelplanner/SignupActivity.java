@@ -2,6 +2,7 @@ package com.example.db_14.travelplanner;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -20,12 +23,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,12 +103,12 @@ public class SignupActivity extends Activity {
                 }
             });
 
-            if(response.equalsIgnoreCase("success"))
+            if(response.equalsIgnoreCase("1"))
             {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(), "회원가입 성공 로그인 해주세요.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "회원가입 성공 로그인 해주세요."+response.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -119,12 +117,17 @@ public class SignupActivity extends Activity {
             }
             else
             {
-                Toast.makeText(getApplicationContext(), "회원가입 실패 (아이디 중복일 수 있습니다.)", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "회원가입 실패 (아이디 중복일 수 있습니다.)"+response.toString(), Toast.LENGTH_SHORT).show();
             }
         }
         catch (Exception e){
             dialog.dismiss();
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }

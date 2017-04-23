@@ -1,6 +1,7 @@
 package com.example.db_14.travelplanner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.FrameLayout;
 import com.skp.Tmap.TMapMarkerItem;
 import com.skp.Tmap.TMapPoint;
 import com.skp.Tmap.TMapView;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 /**
  * Created by db-14 on 2017. 2. 14..
@@ -58,4 +60,8 @@ public class SightMapActivity extends Activity {
         });
     }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
+    }
 }

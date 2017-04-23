@@ -1,10 +1,18 @@
 package com.example.db_14.travelplanner;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,21 +29,43 @@ import java.util.ArrayList;
 public class UserPlanActivity extends Activity {
     String usrid;
     ListView planview;
+    Button add_plan;
     private ArrayList<String> plans;
+    private ArrayList<String> pnos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
-        usrid = getIntent().getStringExtra("usrid");
-        plans = new ArrayList<String>();
+        add_plan = (Button)findViewById(R.id.addplan);
+        usrid = getIntent().getStringExtra("USRID");
+        plans = new ArrayList<String>(50);
+        pnos = new ArrayList<String>(50);
         getPlan(usrid);
+
 
         planview = (ListView)findViewById(R.id.plan_list);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, plans) ;
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, plans) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent)
+            {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                int textColor = R.color.colorGrey;
+                textView.setTextColor(UserPlanActivity.this.getResources().getColor(textColor));
+                return textView; } };
+
 
         planview.setAdapter(adapter);
+
+        add_plan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent add_p = new Intent(UserPlanActivity.this, PlanAddActivity.class);
+                add_p.putExtra("usrid", usrid);
+                startActivity(add_p);
+            }
+        });
     }
 
     public void getPlan(String id)
@@ -65,15 +95,17 @@ public class UserPlanActivity extends Activity {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(buffer.toString());
             JSONArray array = (JSONArray) jsonObject.get("result");
-            String pname = "";
+            String pname = ""; String pno = ""; String usrid = "";
 
             for (int i = 0; i < array.size(); i++) {
 
                 JSONObject entity = (JSONObject) array.get(i);
-                String usrid = entity.get("usrid").toString();
+                usrid = entity.get("usrid").toString();
                 if(usrid.equals(id)) {
                     pname = entity.get("pname").toString();
-                    plans.add(i, pname);
+                    pno = entity.get("planno").toString();
+                    pnos.add(pno);
+                    plans.add(pname);
                 }
             }
         }
@@ -81,5 +113,10 @@ public class UserPlanActivity extends Activity {
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }

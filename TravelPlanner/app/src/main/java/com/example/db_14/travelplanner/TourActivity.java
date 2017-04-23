@@ -1,6 +1,7 @@
 package com.example.db_14.travelplanner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.skp.Tmap.TMapView;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 /**
  * Created by User on 2017-02-09.
@@ -55,6 +57,11 @@ public class TourActivity extends Activity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }
 
