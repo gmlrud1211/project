@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -21,17 +22,18 @@ import org.json.simple.parser.JSONParser;
 import java.io.BufferedInputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by a0104 on 2017-02-21.
  */
 
-public class UserPlanActivity extends Activity {
+public class UserPlanActivity extends Activity implements AdapterView.OnItemClickListener {
     String usrid;
     ListView planview;
     Button add_plan;
     private ArrayList<String> plans;
-    private ArrayList<String> pnos;
+    private HashMap<String, String> pinfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +42,17 @@ public class UserPlanActivity extends Activity {
         add_plan = (Button)findViewById(R.id.addplan);
         usrid = getIntent().getStringExtra("USRID");
         plans = new ArrayList<String>(50);
-        pnos = new ArrayList<String>(50);
+        pinfo = new HashMap<String, String>(50);
         getPlan(usrid);
 
+        add_plan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(UserPlanActivity.this, PlanAddActivity.class);
+                in.putExtra("USRID", usrid);
+                startActivity(in);
+            }
+        });
 
         planview = (ListView)findViewById(R.id.plan_list);
 
@@ -57,12 +67,13 @@ public class UserPlanActivity extends Activity {
 
 
         planview.setAdapter(adapter);
+        planview.setOnItemClickListener(this);
 
         add_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent add_p = new Intent(UserPlanActivity.this, PlanAddActivity.class);
-                add_p.putExtra("usrid", usrid);
+                add_p.putExtra("USRID", usrid);
                 startActivity(add_p);
             }
         });
@@ -95,7 +106,7 @@ public class UserPlanActivity extends Activity {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(buffer.toString());
             JSONArray array = (JSONArray) jsonObject.get("result");
-            String pname = ""; String pno = ""; String usrid = "";
+            String pname = ""; String usrid = ""; String sdate=""; String fdate=""; String pno="";
 
             for (int i = 0; i < array.size(); i++) {
 
@@ -103,9 +114,14 @@ public class UserPlanActivity extends Activity {
                 usrid = entity.get("usrid").toString();
                 if(usrid.equals(id)) {
                     pname = entity.get("pname").toString();
+                    sdate = entity.get("sdate").toString();
+                    fdate = entity.get("fdate").toString();
                     pno = entity.get("planno").toString();
-                    pnos.add(pno);
                     plans.add(pname);
+                    pinfo.put("pname"+String.valueOf(i), pname);
+                    pinfo.put("pno"+String.valueOf(i), pno);
+                    pinfo.put("sdate", sdate);
+                    pinfo.put("fdate", fdate);
                 }
             }
         }
@@ -113,6 +129,17 @@ public class UserPlanActivity extends Activity {
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parentView, View clickedView, int position, long id)
+    {
+        Intent intent = new Intent(UserPlanActivity.this, PlanViewActivity.class); // 플랜 뷰 액티비티랑 연결할 것
+        intent.putExtra("PLANNO", pinfo.get("pno"+String.valueOf(position)));
+        intent.putExtra("SDATE", pinfo.get("sdate"+String.valueOf(position)));
+        intent.putExtra("FDATE", pinfo.get("fdate"+String.valueOf(position)));
+        intent.putExtra("PNAME", pinfo.get("pname"+String.valueOf(position)));
+        startActivity(intent);
     }
 
     @Override
