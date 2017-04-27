@@ -33,7 +33,7 @@ import java.util.List;
 public class SightViewActivity extends Activity {
 
     TextView title, overview, addr;
-    Button map, bookmark;
+    Button map, bookmark, addplan;
     ImageView image;
     String ovStr;
     HashMap<String, String> sightinfo = new HashMap<String, String>();
@@ -50,6 +50,7 @@ public class SightViewActivity extends Activity {
         image = (ImageView) findViewById(R.id.sight_image);
         map = (Button) findViewById(R.id.sight_map);
         bookmark = (Button) findViewById(R.id.bookmark);
+        addplan = (Button) findViewById(R.id.add_plan);
 
         sightinfo = (HashMap<String, String>) getIntent().getSerializableExtra("sightInfo");
 
@@ -114,6 +115,20 @@ public class SightViewActivity extends Activity {
                 catch (Exception e){
                     e.printStackTrace();
                 }
+            }
+        });
+
+        addplan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(SightViewActivity.this, UserPlanActivity.class);
+                in.putExtra("USRID", getIntent().getStringExtra("usrid"));
+                in.putExtra("ADDPLAN", 1);
+                in.putExtra("SIGHTTITLE", sightinfo.get("title"));
+                in.putExtra("LAT", sight.get(0).get("mapy"));
+                in.putExtra("LON", sight.get(0).get("mapx"));
+                startActivity(in);
+                finish();
             }
         });
     }

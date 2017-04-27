@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tsengvn.typekit.TypekitContextWrapper;
 
@@ -142,8 +141,8 @@ public class PlanAddActivity extends Activity implements View.OnClickListener {
         Date date = new GregorianCalendar(year, month, day).getTime();
         String myear, mmonth, mday;
         myear = String.valueOf(year);
-        mmonth = (month+1 < 10) ? "0"+String.valueOf(month+1): String.valueOf(month+1);
-        mday = String.valueOf(day);
+        mmonth = (month+1 < 10) ? "0"+String.valueOf(month+1) : String.valueOf(month+1);
+        mday = (day<10) ? "0"+String.valueOf(day) : String.valueOf(day);
         String formatedDate = myear+mmonth+mday;
 
         switch (callerId) {
@@ -162,25 +161,12 @@ public class PlanAddActivity extends Activity implements View.OnClickListener {
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost("http://52.79.131.13/db_insert.php");
 
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
             String query = "insert into plan(pname, usrid, sdate, fdate) values ('"+pname+"','"+usrid+"','"+sdate+"','"+fdate+"')"; // 쿼리문 수정 및 db 테이블 추가 필요
             nameValuePairs.add(new BasicNameValuePair("query", query));
-            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
             HttpResponse response = httpClient.execute(httpPost);
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
-
-            final String res = httpClient.execute(httpPost, responseHandler);
-
-            if(res.equalsIgnoreCase("success"))
-            {
-                Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
-                // db에서 res값을 보내지 않아 처리 불가능 문제 확인 필요
-            }
-            finish();
         }
         catch (Exception e){
             e.printStackTrace();

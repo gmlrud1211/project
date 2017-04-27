@@ -33,13 +33,23 @@
             android:layout_gravity="center_vertical"/>
         <TextView
             android:id="@+id/sight_add"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="장소 추가"
+            android:text="여행지 목록"
             android:textColor="#000000"
+            android:textStyle="bold"
             android:layout_gravity="center_vertical"
             android:gravity="center"
+            android:layout_weight="1"
             />
+        <Button
+            android:id="@+id/shortpath"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_selector"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:text="최단경로"/>
     </TableRow>
 
     <ListView

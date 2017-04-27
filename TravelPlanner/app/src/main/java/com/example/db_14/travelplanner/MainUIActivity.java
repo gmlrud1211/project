@@ -73,6 +73,7 @@ public class MainUIActivity extends AppCompatActivity
                 return;
             }
 
+            intent.putExtra("usrid", usrid);
             startActivity(intent);
         }
 

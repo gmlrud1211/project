@@ -29,7 +29,6 @@ public class SightMapActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_map);
         mapLayout = (FrameLayout) findViewById(R.id.sight_mapview);
-        close = (Button) findViewById(R.id.closebtn);
 
         lat = Double.parseDouble(getIntent().getStringExtra("lat"));
         lon = Double.parseDouble(getIntent().getStringExtra("lon"));

@@ -89,7 +89,7 @@ public class SignupActivity extends Activity {
             nameValuePairs.add(new BasicNameValuePair("id", id));
             nameValuePairs.add(new BasicNameValuePair("password", pwd));
             nameValuePairs.add(new BasicNameValuePair("name", name));
-            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
             response = httpClient.execute(httpPost);
 
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
