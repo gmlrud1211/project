@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -25,13 +26,23 @@ import com.skp.Tmap.TMapPolyLine;
 import com.skp.Tmap.TMapView;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
-import org.json.simple.parser.JSONParser;
-import org.json.simple.JSONObject;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedInputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.db_14.travelplanner.R.drawable.marker;
 import static com.example.db_14.travelplanner.R.drawable.start_marker;
@@ -48,8 +59,9 @@ public class PlanViewActivity extends Activity {
     ArrayList<SightData> slist;
     ArrayList<TMapPoint> points;
     Button shortpath;
-    ListViewAdapter adapter;
+    ListAdapter adapter;
     ArrayList<TMapMarkerItem> markers;
+    int pos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +102,7 @@ public class PlanViewActivity extends Activity {
             markers.add(item);
             tMapView.addMarkerItem("marker" + Integer.toString(i), markers.get(i));
         }
-        adapter = new ListViewAdapter(getApplicationContext(), slist);
+        adapter = new ListAdapter(getApplicationContext(), slist);
         planlist.setAdapter(adapter);
 
         if (points.size()>=0) {
@@ -134,8 +146,15 @@ public class PlanViewActivity extends Activity {
                 tMapView.addTMapPath(line);
             }
         });
-    }
 
+        planlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                tMapView.removeTMapPath();
+            }
+        });
+
+    }
 
     public void getPlanlist(String pno)
     {
@@ -164,15 +183,16 @@ public class PlanViewActivity extends Activity {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(buffer.toString());
             JSONArray array = (JSONArray) jsonObject.get("result");
-            SightData data; TMapPoint point; String sname; double lat, lon;
+            SightData data; TMapPoint point; String sname, contentid; double lat, lon;
             for (int i = 0; i < array.size(); i++) {
                 JSONObject entity = (JSONObject) array.get(i);
                 if(entity.get("planno").toString().equals(pno)) {
                     sname = entity.get("sname").toString();
                     lat = Double.parseDouble(entity.get("lat").toString());
                     lon = Double.parseDouble(entity.get("lon").toString());
+                    contentid = entity.get("contentid").toString();
                     point = new TMapPoint(lat, lon);
-                    data = new SightData(sname, lat, lon);
+                    data = new SightData(sname, lat, lon, contentid);
                     points.add(point);
                     slist.add(data);
                 }
@@ -189,12 +209,12 @@ public class PlanViewActivity extends Activity {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 
-    private class ListViewAdapter extends BaseAdapter
+    private class ListAdapter extends BaseAdapter
     {
         private Context context = null;
         private ArrayList<SightData> list = new ArrayList<SightData>();
 
-        public ListViewAdapter(Context context, ArrayList<SightData> list){
+        public ListAdapter(Context context, ArrayList<SightData> list){
             super();
             this.context = context;
             this.list = list;
@@ -234,5 +254,24 @@ public class PlanViewActivity extends Activity {
         }
     }
 
+    public void deletesight(String contentid)
+    {
+        try{
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost("http://52.79.131.13/db_delete.php");
+
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+            String query = "delete from plan_info where planno="+pno+" and contentid='"+contentid+"'"; // 쿼리문 수정 및 db 테이블 추가 필요
+            nameValuePairs.add(new BasicNameValuePair("query", query));
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
+            HttpResponse response = httpClient.execute(httpPost);
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+
+            final String res = httpClient.execute(httpPost, responseHandler);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
 

@@ -39,41 +39,39 @@ import java.util.List;
  * Created by a0104 on 2017-02-21.
  */
 
-public class UserPlanActivity extends Activity implements AdapterView.OnItemClickListener {
+public class UserPlanActivity extends Activity implements AdapterView.OnItemClickListener, View.OnClickListener {
     String usrid;
+    ArrayAdapter adapter;
     ListView planview;
-    Button add_plan;
+    Button add_plan, remove_plan;
     private ArrayList<String> plans;
     private HashMap<String, String> pinfo;
-    int is_add; double lat, lon;
+    int is_add, is_remove; double lat, lon; String contentid;
+    int func=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
         add_plan = (Button)findViewById(R.id.addplan);
+        remove_plan = (Button)findViewById(R.id.removeplan);
+        add_plan.setOnClickListener(this);
+        remove_plan.setOnClickListener(this);
+
         usrid = getIntent().getStringExtra("USRID");
         is_add = getIntent().getIntExtra("ADDPLAN", 0);
         if(is_add==1) {
             lat = Double.parseDouble(getIntent().getStringExtra("LAT"));
             lon = Double.parseDouble(getIntent().getStringExtra("LON"));
+            contentid = getIntent().getStringExtra("CONTENTID");
         }
         plans = new ArrayList<String>(50);
         pinfo = new HashMap<String, String>(50);
         getPlan(usrid);
 
-        add_plan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent in = new Intent(UserPlanActivity.this, PlanAddActivity.class);
-                in.putExtra("USRID", usrid);
-                startActivity(in);
-            }
-        });
-
         planview = (ListView)findViewById(R.id.plan_list);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, plans) {
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, plans) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent)
             {
@@ -86,14 +84,6 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
         planview.setAdapter(adapter);
         planview.setOnItemClickListener(this);
 
-        add_plan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent add_p = new Intent(UserPlanActivity.this, PlanAddActivity.class);
-                add_p.putExtra("USRID", usrid);
-                startActivity(add_p);
-            }
-        });
     }
 
     public void getPlan(String id)
@@ -154,7 +144,17 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
     {
         if (is_add==1)
         {
-            addsight(pinfo.get("pno"+String.valueOf(position)), usrid, getIntent().getStringExtra("SIGHTTITLE"), lat, lon);
+            addsight(pinfo.get("pno"+String.valueOf(position)), usrid, getIntent().getStringExtra("SIGHTTITLE"), lat, lon, contentid);
+        }
+        else if(is_remove==1)
+        {
+            deleteplan(pinfo.get("pno"+String.valueOf(position)));
+            plans.clear();
+            pinfo.clear();
+            getPlan(usrid);
+            adapter.notifyDataSetChanged();
+            is_remove=0;
+            return;
         }
         Intent intent = new Intent(UserPlanActivity.this, PlanViewActivity.class); // 플랜 뷰 액티비티랑 연결할 것
         intent.putExtra("PLANNO", pinfo.get("pno"+String.valueOf(position)));
@@ -164,14 +164,35 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
         startActivity(intent);
     }
 
-    public void addsight(String pno, String usrid, String sname, double lat, double lon)
+
+    @Override
+    protected void onActivityResult(int request, int result, Intent in)
+    {
+        if (request==1)
+        {
+            if(result==RESULT_OK)
+            {
+                switch (func)
+                {
+                    case 1:
+                        plans.clear();
+                        pinfo.clear();
+                        getPlan(usrid);
+                        adapter.notifyDataSetChanged();
+                        break;
+                }
+            }
+        }
+    }
+
+    public void addsight(String pno, String usrid, String sname, double lat, double lon, String contentid)
     {
         try{
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost("http://52.79.131.13/db_insert.php");
 
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-            String query = "insert into plan_info(planno, usrid, sname, lat, lon) values ('"+pno+"','"+usrid+"','"+sname+"','"+lat+"','"+lon+"')"; // 쿼리문 수정 및 db 테이블 추가 필요
+            String query = "insert into plan_info(planno, usrid, sname, lat, lon, contentid) values ('"+pno+"','"+usrid+"','"+sname+"','"+lat+"','"+lon+"','"+contentid+"')"; // 쿼리문 수정 및 db 테이블 추가 필요
             nameValuePairs.add(new BasicNameValuePair("query", query));
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
             HttpResponse response = httpClient.execute(httpPost);
@@ -199,4 +220,41 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.addplan:
+                Intent in = new Intent(UserPlanActivity.this, PlanAddActivity.class);
+                in.putExtra("USRID", usrid);
+                startActivityForResult(in, 1);
+                func=1;
+                break;
+            case R.id.removeplan:
+                Toast.makeText(this, "삭제할 계획을 선택하세요.", Toast.LENGTH_SHORT).show();
+                is_remove=1;
+                break;
+        }
+    }
+
+    public void deleteplan(String pno)
+    {
+        try{
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost("http://52.79.131.13/db_delete.php");
+
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+            String query = "delete from plan where planno="+pno; // 쿼리문 수정 및 db 테이블 추가 필요
+            nameValuePairs.add(new BasicNameValuePair("query", query));
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
+            HttpResponse response = httpClient.execute(httpPost);
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+
+            final String res = httpClient.execute(httpPost, responseHandler);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
+

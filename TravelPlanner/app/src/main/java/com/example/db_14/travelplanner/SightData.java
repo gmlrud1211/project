@@ -9,11 +9,13 @@ public class SightData {
     public String sight;
     public double lat;
     public double lon;
+    public String contentid;
 
-    public SightData(String sight, double lat, double lon) {
+    public SightData(String sight, double lat, double lon, String contentid) {
         this.sight = sight;
         this.lat = lat;
         this.lon = lon;
+        this.contentid = contentid;
     }
 
     public void setDay(String day)
@@ -52,4 +54,14 @@ public class SightData {
     }
 
     public double getLon() { return lon; }
+
+    public void setContentid(String sight)
+    {
+        this.contentid = contentid;
+    }
+
+    public String getContentid()
+    {
+        return contentid;
+    }
 }

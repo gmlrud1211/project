@@ -1,39 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="#ffffff">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="#ffffff"
+    android:baselineAligned="false"
+    android:orientation="vertical">
 
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/sight_title"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="20dp"
-        android:background="#4ba8ff"
-        android:textColor="#ffffff"
-        android:text="내 여행계획"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="wrap_content"
+        android:background="#4ba8ff">
 
-    <Button
-        android:layout_width="70dp"
-        android:layout_height="15dp"
-        android:text="계획추가"
-        android:id="@+id/addplan"
-        android:gravity="center"
-        android:textColor="#ffffff"
-        android:background="@drawable/button_background"
-        android:textSize="12dp"
-        android:layout_marginLeft="5dp"
-        android:layout_alignBaseline="@+id/sight_title"
-        android:layout_alignBottom="@+id/sight_title" />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/sight_title"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:text="내 여행계획"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/removeplan"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:background="@drawable/button_background"
+            android:gravity="center"
+            android:text="계획삭제"
+            android:textColor="#ffffff"
+            android:textSize="12dp"
+            android:layout_alignBaseline="@+id/sight_title"
+            android:layout_alignBottom="@+id/sight_title"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/addplan"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:background="@drawable/button_background"
+            android:gravity="center"
+            android:text="계획추가"
+            android:textColor="#ffffff"
+            android:textSize="12dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
     <ListView
         android:layout_width="match_parent"

@@ -127,6 +127,7 @@ public class SightViewActivity extends Activity {
                 in.putExtra("SIGHTTITLE", sightinfo.get("title"));
                 in.putExtra("LAT", sight.get(0).get("mapy"));
                 in.putExtra("LON", sight.get(0).get("mapx"));
+                in.putExtra("CONTENTID", sightinfo.get("contentid"));
                 startActivity(in);
                 finish();
             }

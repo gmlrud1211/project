@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -82,7 +83,9 @@ public class PlanAddActivity extends Activity implements View.OnClickListener {
                 showDatePickerDialog(view.getId(), et1.getText().toString().trim());
                 break;
             case R.id.add_ok_btn:
+                Intent in = new Intent();
                 addPlanDB(tvToDate.getText().toString(), tvFromDate.getText().toString(), pname.getText().toString(), usrid);
+                setResult(RESULT_OK, in);
                 finish();
         }
     }
