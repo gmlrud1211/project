@@ -4,11 +4,7 @@
     android:layout_height="match_parent">
 
     <ListView
-<<<<<<< HEAD
         android:id="@+id/review_activity_main"
-=======
-        android:id="@+id/lvReviewList"
->>>>>>> origin/master
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>
