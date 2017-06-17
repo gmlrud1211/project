@@ -18,7 +18,7 @@ import com.tsengvn.typekit.TypekitContextWrapper;
 public class MainUIActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    Intent intent = null;
+    Intent intent,intent2 = null;
     String usrid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,7 @@ public class MainUIActivity extends AppCompatActivity
         public void onClick(View view) {
             int id = view.getId();
             intent = new Intent(MainUIActivity.this, ListActivity.class);
+            intent2 = new Intent(MainUIActivity.this, ReviewActivity.class);
             URLConnector conn = new URLConnector();
             conn.APIareaCode("areaCode?");
 
@@ -65,6 +66,11 @@ public class MainUIActivity extends AppCompatActivity
             {
                 intent.putExtra("areaList", conn.getList());
                 intent.putExtra("ContentTypeId", "15");
+            }
+            else if(id == R.id.review)
+            {
+                intent.putExtra("USRID", usrid);
+                startActivity(intent2);
             }
             else
             {
