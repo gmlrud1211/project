@@ -35,7 +35,8 @@
         <activity android:name=".PlanAddActivity" />
         <activity android:name=".AccountEditActivity"/>
         <activity android:name=".AccountAddActivity"/>
-        <activity android:name=".PlanViewActivity"></activity>
+        <activity android:name=".PlanViewActivity"/>
+        <activity android:name=".ReviewActivity"/>
         <activity
             android:name=".MainUIActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

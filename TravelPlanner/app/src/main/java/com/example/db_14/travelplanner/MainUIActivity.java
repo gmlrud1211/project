@@ -66,6 +66,11 @@ public class MainUIActivity extends AppCompatActivity
                 intent.putExtra("areaList", conn.getList());
                 intent.putExtra("ContentTypeId", "15");
             }
+            else if(id == R.id.review)
+            {
+                intent = new Intent(MainUIActivity.this, ReviewActivity.class);
+                startActivity(intent);
+            }
             else
             {
                 Toast.makeText(this, "준비중", Toast.LENGTH_SHORT).show();
