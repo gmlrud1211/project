@@ -46,6 +46,7 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
     Button add_plan, remove_plan;
     private ArrayList<String> plans;
     private HashMap<String, String> pinfo;
+    int is_bill;
     int is_add, is_remove; double lat, lon; String contentid;
     int func=0;
 
@@ -60,6 +61,14 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
 
         usrid = getIntent().getStringExtra("USRID");
         is_add = getIntent().getIntExtra("ADDPLAN", 0);
+        is_bill = getIntent().getIntExtra("ISBILL", 0);
+
+        if(is_bill==1)
+        {
+            add_plan.setVisibility(View.INVISIBLE);
+            remove_plan.setVisibility(View.INVISIBLE);
+        }
+
         if(is_add==1) {
             lat = Double.parseDouble(getIntent().getStringExtra("LAT"));
             lon = Double.parseDouble(getIntent().getStringExtra("LON"));
@@ -154,6 +163,15 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
             getPlan(usrid);
             adapter.notifyDataSetChanged();
             is_remove=0;
+            return;
+        }
+        else if(is_bill==1)
+        {
+            Intent intent = new Intent(UserPlanActivity.this, AccountActivity.class);
+            intent.putExtra("PLANNO", pinfo.get("pno"+String.valueOf(position)));
+            intent.putExtra("PNAME", pinfo.get("pname"+String.valueOf(position)));
+            intent.putExtra("USRID", usrid);
+            startActivity(intent);
             return;
         }
         Intent intent = new Intent(UserPlanActivity.this, PlanViewActivity.class); // 플랜 뷰 액티비티랑 연결할 것

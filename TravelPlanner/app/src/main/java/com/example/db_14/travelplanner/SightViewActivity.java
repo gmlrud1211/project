@@ -57,7 +57,8 @@ public class SightViewActivity extends Activity {
         URLConnector conn = new URLConnector();
         conn.APIsightInfo("detailCommon?", sightinfo.get("contentid"));
         sight = conn.getList();
-        ovStr = sight.get(0).get("overview");
+        if(sight.get(0).get("overview")!=null) ovStr = sight.get(0).get("overview");
+        else ovStr = "";
 
         title.setText(sightinfo.get("title"));
         overview.setText(ovStr);

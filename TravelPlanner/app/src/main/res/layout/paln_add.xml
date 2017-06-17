@@ -23,23 +23,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp" />
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        >
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="인원수" />
 
-        <Spinner
-            android:id="@+id/people"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"/>
-    </TableRow>
 
     <TableRow
         android:layout_width="match_parent"

@@ -5,8 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.skp.Tmap.TMapMarkerItem;
@@ -21,7 +19,6 @@ public class SightMapActivity extends Activity {
 
     String APPKEY = "2cfca2bc-7f91-3031-b69d-3c7eed12970c";
     FrameLayout mapLayout;
-    Button close;
     double lat, lon;
 
     @Override
@@ -50,13 +47,6 @@ public class SightMapActivity extends Activity {
         tMapView.addMarkerItem("marker", item);
         tMapView.setCenterPoint(tMapPoint.getLongitude(), tMapPoint.getLatitude());
 
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     @Override

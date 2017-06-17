@@ -28,7 +28,6 @@ public class MainUIActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         usrid = getIntent().getStringExtra("USRID");
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -99,9 +98,13 @@ public class MainUIActivity extends AppCompatActivity
         } else if (id == R.id.nav_myplan) {
             intent = new Intent(MainUIActivity.this, UserPlanActivity.class);
             intent.putExtra("USRID", usrid);
+            intent.putExtra("ISBILL", 0);
             startActivity(intent);
         } else if (id == R.id.nav_cost) {
-            Toast.makeText(this, "준비중", Toast.LENGTH_SHORT).show();
+            intent = new Intent(MainUIActivity.this, UserPlanActivity.class);
+            intent.putExtra("USRID", usrid);
+            intent.putExtra("ISBILL", 1);
+            startActivity(intent);
         } else if (id == R.id.nav_myreview) {
             Toast.makeText(this, "준비중", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_mypage) {
