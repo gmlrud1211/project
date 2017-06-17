@@ -7,12 +7,12 @@ package com.example.db_14.travelplanner;
 public class ReviewListViewItem {
     private String title;
     private String reviewer;
-    private int Count;
+    private int count;
 
-    public ReviewListViewItem(String title, String reviewer, int Count) {
+    public ReviewListViewItem(String title, String reviewer, int count) {
         this.title = title;
         this.reviewer=reviewer;
-        this.Count = Count;
+        this.count = count;
     }
     public String getTitle() {
         return title;
@@ -21,7 +21,7 @@ public class ReviewListViewItem {
         return reviewer;
     }
     public int getCount() {
-        return Count;
+        return count;
     }
 
     public void setTitle(String title) {
@@ -30,7 +30,7 @@ public class ReviewListViewItem {
     public void setReviewer(String reviewer) {
         this.reviewer= reviewer;
     }
-    public void setCount(int Count) {
-        this.Count = Count;
+    public void setCount(int count) {
+        this.count = count;
     }
 }
