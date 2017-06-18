@@ -5,10 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,7 +33,6 @@ import org.json.simple.parser.JSONParser;
 import java.io.BufferedInputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -41,13 +41,12 @@ import java.util.List;
 
 public class UserPlanActivity extends Activity implements AdapterView.OnItemClickListener, View.OnClickListener {
     String usrid;
-    ArrayAdapter adapter;
+    PlanAdapter adapter;
     ListView planview;
     Button add_plan, remove_plan;
-    private ArrayList<String> plans;
-    private HashMap<String, String> pinfo;
+    private ArrayList<PlanData> plans;
     int is_bill;
-    int is_add, is_remove; double lat, lon; String contentid;
+    int is_add, is_remove, is_edit; double lat, lon; String contentid;
     int func=0;
 
     @Override
@@ -74,25 +73,30 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
             lon = Double.parseDouble(getIntent().getStringExtra("LON"));
             contentid = getIntent().getStringExtra("CONTENTID");
         }
-        plans = new ArrayList<String>(50);
-        pinfo = new HashMap<String, String>(50);
+        plans = new ArrayList<PlanData>();
         getPlan(usrid);
 
         planview = (ListView)findViewById(R.id.plan_list);
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, plans) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent)
-            {
-                TextView textView = (TextView) super.getView(position, convertView, parent);
-                int textColor = R.color.colorGrey;
-                textView.setTextColor(UserPlanActivity.this.getResources().getColor(textColor));
-                return textView; } };
-
+        adapter = new PlanAdapter(getApplicationContext(), plans);
 
         planview.setAdapter(adapter);
         planview.setOnItemClickListener(this);
 
+        planview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent in = new Intent(UserPlanActivity.this, PlanEditActivity.class);
+                in.putExtra("USRID", usrid);
+                in.putExtra("PNAME", plans.get(position).pname);
+                in.putExtra("PNO", plans.get(position).pno);
+                in.putExtra("SDATE", plans.get(position).sdate);
+                in.putExtra("FDATE", plans.get(position).fdate);
+                is_edit=1;
+                startActivityForResult(in, 1);
+                return false;
+            }
+        });
     }
 
     public void getPlan(String id)
@@ -123,9 +127,7 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
             JSONObject jsonObject = (JSONObject) jsonParser.parse(buffer.toString());
             JSONArray array = (JSONArray) jsonObject.get("result");
             String pname = ""; String usrid = ""; String sdate=""; String fdate=""; String pno="";
-            int idx = 0;
             for (int i = 0; i < array.size(); i++) {
-
                 JSONObject entity = (JSONObject) array.get(i);
                 usrid = entity.get("usrid").toString();
                 if(usrid.equals(id)) {
@@ -133,12 +135,7 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
                     sdate = entity.get("sdate").toString();
                     fdate = entity.get("fdate").toString();
                     pno = entity.get("planno").toString();
-                    plans.add(pname);
-                    pinfo.put("pname"+String.valueOf(idx), pname);
-                    pinfo.put("pno"+String.valueOf(idx), pno);
-                    pinfo.put("sdate", sdate);
-                    pinfo.put("fdate", fdate);
-                    idx++;
+                    plans.add(new PlanData(pno, pname, sdate, fdate));
                 }
             }
         }
@@ -153,13 +150,12 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
     {
         if (is_add==1)
         {
-            addsight(pinfo.get("pno"+String.valueOf(position)), usrid, getIntent().getStringExtra("SIGHTTITLE"), lat, lon, contentid);
+            addsight(plans.get(position).pno, usrid, getIntent().getStringExtra("SIGHTTITLE"), lat, lon, contentid);
         }
         else if(is_remove==1)
         {
-            deleteplan(pinfo.get("pno"+String.valueOf(position)));
+            deleteplan(plans.get(position).pno);
             plans.clear();
-            pinfo.clear();
             getPlan(usrid);
             adapter.notifyDataSetChanged();
             is_remove=0;
@@ -168,20 +164,39 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
         else if(is_bill==1)
         {
             Intent intent = new Intent(UserPlanActivity.this, AccountActivity.class);
-            intent.putExtra("PLANNO", pinfo.get("pno"+String.valueOf(position)));
-            intent.putExtra("PNAME", pinfo.get("pname"+String.valueOf(position)));
+            intent.putExtra("PLANNO", plans.get(position).pno);
+            intent.putExtra("PNAME", plans.get(position).pname);
             intent.putExtra("USRID", usrid);
             startActivity(intent);
             return;
         }
+        else if(is_edit==1)
+        {
+            return;
+        }
         Intent intent = new Intent(UserPlanActivity.this, PlanViewActivity.class); // 플랜 뷰 액티비티랑 연결할 것
-        intent.putExtra("PLANNO", pinfo.get("pno"+String.valueOf(position)));
-        intent.putExtra("SDATE", pinfo.get("sdate"+String.valueOf(position)));
-        intent.putExtra("FDATE", pinfo.get("fdate"+String.valueOf(position)));
-        intent.putExtra("PNAME", pinfo.get("pname"+String.valueOf(position)));
+        intent.putExtra("PLANNO", plans.get(position).pno);
+        intent.putExtra("SDATE", plans.get(position).sdate);
+        intent.putExtra("FDATE", plans.get(position).fdate);
+        intent.putExtra("PNAME", plans.get(position).pname);
+        intent.putExtra("USRID", usrid);
         startActivity(intent);
     }
 
+    public class PlanData {
+        String pno;
+        String pname;
+        String sdate;
+        String fdate;
+
+        public PlanData(String pno, String pname, String sdate, String fdate)
+        {
+            this.pno = pno;
+            this.pname = pname;
+            this.sdate = sdate;
+            this.fdate = fdate;
+        }
+    }
 
     @Override
     protected void onActivityResult(int request, int result, Intent in)
@@ -190,15 +205,9 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
         {
             if(result==RESULT_OK)
             {
-                switch (func)
-                {
-                    case 1:
-                        plans.clear();
-                        pinfo.clear();
-                        getPlan(usrid);
-                        adapter.notifyDataSetChanged();
-                        break;
-                }
+                plans.clear();
+                getPlan(usrid);
+                adapter.notifyDataSetChanged();
             }
         }
     }
@@ -209,24 +218,12 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost("http://52.79.131.13/db_insert.php");
 
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
             String query = "insert into plan_info(planno, usrid, sname, lat, lon, contentid) values ('"+pno+"','"+usrid+"','"+sname+"','"+lat+"','"+lon+"','"+contentid+"')"; // 쿼리문 수정 및 db 테이블 추가 필요
             nameValuePairs.add(new BasicNameValuePair("query", query));
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
             HttpResponse response = httpClient.execute(httpPost);
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
-
-            final String res = httpClient.execute(httpPost, responseHandler);
-
-            if(res.equalsIgnoreCase("success"))
-            {
-                Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
-                // db에서 res값을 보내지 않아 처리 불가능 문제 확인 필요
-            }
             finish();
         }
         catch (Exception e){
@@ -274,5 +271,49 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
             e.printStackTrace();
         }
     }
+
+    private class PlanAdapter extends BaseAdapter
+    {
+        private Context context = null;
+        private ArrayList<PlanData> list = new ArrayList<PlanData>();
+
+        public PlanAdapter(Context context, ArrayList<PlanData> list){
+            super();
+            this.context = context;
+            this.list = list;
+        }
+
+        @Override
+        public int getCount()
+        {
+            return list.size();
+        }
+
+        @Override
+        public Object getItem(int position)
+        {
+            return list.get(position);
+        }
+
+        @Override
+        public long getItemId(int position)
+        {
+            return position;
+        }
+
+        @Override
+        public View getView(int pos, View convertView, ViewGroup parent)
+        {
+            if (convertView==null)
+            {
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.listview_item, parent, false);
+            }
+            TextView title = (TextView) convertView.findViewById(R.id.name);
+            title.setText(list.get(pos).pname);
+            return convertView;
+        }
+    }
+
 }
 

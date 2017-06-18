@@ -32,10 +32,10 @@ import java.util.List;
 
 public class SightViewActivity extends Activity {
 
-    TextView title, overview, addr;
+    TextView titleview, overview, addr;
     Button map, bookmark, addplan;
     ImageView image;
-    String ovStr;
+    String ovStr, contentid;
     HashMap<String, String> sightinfo = new HashMap<String, String>();
     ArrayList<HashMap<String, String>> sight = new ArrayList<HashMap<String, String>>();
 
@@ -44,7 +44,7 @@ public class SightViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_sight);
 
-        title = (TextView) findViewById(R.id.sight_title);
+        titleview = (TextView) findViewById(R.id.sight_title);
         overview = (TextView) findViewById(R.id.sight_overview);
         addr = (TextView) findViewById(R.id.sight_addr);
         image = (ImageView) findViewById(R.id.sight_image);
@@ -54,13 +54,16 @@ public class SightViewActivity extends Activity {
 
         sightinfo = (HashMap<String, String>) getIntent().getSerializableExtra("sightInfo");
 
+        if(sightinfo!=null) contentid = sightinfo.get("contentid");
+        else contentid = getIntent().getStringExtra("CONTENTID");
+
         URLConnector conn = new URLConnector();
-        conn.APIsightInfo("detailCommon?", sightinfo.get("contentid"));
+        conn.APIsightInfo("detailCommon?", contentid);
         sight = conn.getList();
         if(sight.get(0).get("overview")!=null) ovStr = sight.get(0).get("overview");
         else ovStr = "";
 
-        title.setText(sightinfo.get("title"));
+        titleview.setText(sight.get(0).get("title"));
         overview.setText(ovStr);
         addr.setText(conn.getList().get(0).get("addr1"));
 
@@ -94,9 +97,9 @@ public class SightViewActivity extends Activity {
                     HttpPost httpPost = new HttpPost("http://52.79.131.13/db_insert.php");
 
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-                    String query = "insert into bookmark (usrid, p_code) values ('moonhee', "+sightinfo.get("contentid")+")";
+                    String query = "insert into bookmark (usrid, p_code, sname) values ('"+getIntent().getStringExtra("usrid")+"', "+contentid+", '"+sight.get(0).get("title")+"')";
                     nameValuePairs.add(new BasicNameValuePair("query", query));
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
                     HttpResponse response = httpClient.execute(httpPost);
 
                     ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -105,12 +108,7 @@ public class SightViewActivity extends Activity {
 
                     if(res.equalsIgnoreCase("success"))
                     {
-                        Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
-                        // db에서 res값을 보내지 않아 처리 불가능 문제 확인 필요
+                        Toast.makeText(getApplicationContext(), "즐겨찾기에 추가되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
                 catch (Exception e){
@@ -125,10 +123,10 @@ public class SightViewActivity extends Activity {
                 Intent in = new Intent(SightViewActivity.this, UserPlanActivity.class);
                 in.putExtra("USRID", getIntent().getStringExtra("usrid"));
                 in.putExtra("ADDPLAN", 1);
-                in.putExtra("SIGHTTITLE", sightinfo.get("title"));
+                in.putExtra("SIGHTTITLE", sight.get(0).get("title"));
                 in.putExtra("LAT", sight.get(0).get("mapy"));
                 in.putExtra("LON", sight.get(0).get("mapx"));
-                in.putExtra("CONTENTID", sightinfo.get("contentid"));
+                in.putExtra("CONTENTID", contentid);
                 startActivity(in);
                 finish();
             }

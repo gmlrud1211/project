@@ -5,7 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 public class CustomDialog extends Dialog {
 
-    ImageButton btn_1;
-    ImageButton btn_2;
+    Button btn_1;
+    Button btn_2;
     TextView txt_dialog_title;
     String title;
 
@@ -34,8 +34,8 @@ public class CustomDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog);
         txt_dialog_title = (TextView)findViewById(R.id.txt_dialog_title);
-        btn_1 = (ImageButton)findViewById(R.id.btn_viewinfo);
-        btn_2 = (ImageButton)findViewById(R.id.btn_remove);
+        btn_1 = (Button)findViewById(R.id.btn_viewinfo);
+        btn_2 = (Button)findViewById(R.id.btn_remove);
         btn_1.setOnClickListener(btn1listener);
         btn_2.setOnClickListener(btn2listener);
         txt_dialog_title.setText(title);

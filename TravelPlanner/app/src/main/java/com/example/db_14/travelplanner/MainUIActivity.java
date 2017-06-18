@@ -69,7 +69,6 @@ public class MainUIActivity extends AppCompatActivity
             else if(id == R.id.review)
             {
                 intent = new Intent(MainUIActivity.this, ReviewActivity.class);
-                startActivity(intent);
             }
             else
             {
@@ -113,7 +112,9 @@ public class MainUIActivity extends AppCompatActivity
         } else if (id == R.id.nav_myreview) {
             Toast.makeText(this, "준비중", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_mypage) {
-            Toast.makeText(this, "준비중", Toast.LENGTH_SHORT).show();
+            intent = new Intent(MainUIActivity.this, BookmarkActivity.class);
+            intent.putExtra("USRID", usrid);
+            startActivity(intent);
         } else if (id == R.id.nav_setting) {
             Toast.makeText(this, "준비중", Toast.LENGTH_SHORT).show();
         }

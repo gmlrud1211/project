@@ -2,6 +2,7 @@ package com.example.db_14.travelplanner;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -58,10 +59,10 @@ public class PlanViewActivity extends Activity {
     String sdate, fdate, pno;
     ArrayList<SightData> slist;
     ArrayList<TMapPoint> points;
-    Button shortpath;
+    Button shortpath, addreview, editplan;
     ListAdapter adapter;
     ArrayList<TMapMarkerItem> markers;
-    int pos;
+    CustomDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,8 @@ public class PlanViewActivity extends Activity {
         pname = (TextView) findViewById(R.id.planv_pname);
         planlist = (ListView) findViewById(R.id.planv_list);
         shortpath = (Button) findViewById(R.id.shortpath);
+        addreview = (Button) findViewById(R.id.addreview);
+        editplan = (Button) findViewById(R.id.editplan);
 
         slist = new ArrayList<SightData>();
         points = new ArrayList<TMapPoint>();
@@ -79,9 +82,8 @@ public class PlanViewActivity extends Activity {
         fdate = getIntent().getStringExtra("FDATE");
         pname.setText(getIntent().getStringExtra("PNAME"));
 
-        getPlanlist(pno);
-
         final TMapView tMapView = new TMapView(this);
+        getPlanlist(pno);
         tMapView.setSKPMapApiKey(APPKEY);
         FrameLayout mapLayout = (FrameLayout) findViewById(R.id.planv_map);
         mapLayout.addView(tMapView);
@@ -102,6 +104,7 @@ public class PlanViewActivity extends Activity {
             markers.add(item);
             tMapView.addMarkerItem("marker" + Integer.toString(i), markers.get(i));
         }
+
         adapter = new ListAdapter(getApplicationContext(), slist);
         planlist.setAdapter(adapter);
 
@@ -147,17 +150,74 @@ public class PlanViewActivity extends Activity {
             }
         });
 
+        addreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(PlanViewActivity.this, ReviewAddActivity.class);
+                in.putExtra("PNO", pno);
+                in.putExtra("PNAME", pname.getText().toString());
+                in.putExtra("USRID", getIntent().getStringExtra("USRID"));
+                startActivity(in);
+            }
+        });
+
         planlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 tMapView.removeTMapPath();
                 for (int i = 0; i <points.size(); i++) {
                     tMapView.getMarkerItemFromID("marker" + Integer.toString(i)).
-                            setIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.marker));
+                            setIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), marker));
                 }
 
                 tMapView.getMarkerItemFromID("marker" + Integer.toString(position)).
                         setIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.end_marker));
+                tMapView.setCenterPoint(tMapView.getMarkerItemFromID("marker" + Integer.toString(position)).getTMapPoint().getLongitude(),tMapView.getMarkerItemFromID("marker" + Integer.toString(position)).getTMapPoint().getLatitude());
+                tMapView.setZoomLevel(10);
+            }
+        });
+
+        planlist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, long id) {
+                View.OnClickListener dListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deletesight(slist.get(position).contentid);
+                        slist.clear();
+                        points.clear();
+                        tMapView.removeAllMarkerItem();
+                        getPlanlist(pno);
+
+                        for (int i=0; i<points.size(); i++)
+                        {
+                            TMapMarkerItem item = new TMapMarkerItem();
+                            item.setTMapPoint(points.get(i));
+                            item.setVisible(TMapMarkerItem.VISIBLE);
+                            Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), marker);
+                            item.setIcon(bitmap);
+                            item.setPosition((float) 0.5, (float) 1.0);
+                            // 마커 설정
+                            markers.add(item);
+                            tMapView.addMarkerItem("marker" + Integer.toString(i), markers.get(i));
+                        }
+
+                        adapter.notifyDataSetChanged();
+                        dialog.cancel();
+                    }
+                };
+
+                View.OnClickListener cListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getApplicationContext(), "삭제를 취소합니다.", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                };
+
+                dialog = new CustomDialog(parent.getContext(), cListener, dListener, "일정을 삭제하시겠습니까?");
+                dialog.show();
+                return false;
             }
         });
     }

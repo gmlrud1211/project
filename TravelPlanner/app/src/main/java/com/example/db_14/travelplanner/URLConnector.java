@@ -118,11 +118,13 @@ public class URLConnector {
             else
                 firstimage = "Image Not Found";
 
+            String title = item.get("title").toString();
             data.put("overview", overview);
             data.put("firstimage", firstimage);
             data.put("addr1", addr1);
             data.put("mapx", mapx);
             data.put("mapy", mapy);
+            data.put("title", title);
 
                 dList.add(data);
         }

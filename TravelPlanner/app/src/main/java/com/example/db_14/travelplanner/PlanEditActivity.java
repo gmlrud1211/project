@@ -11,7 +11,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.tsengvn.typekit.TypekitContextWrapper;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -21,6 +23,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,56 +33,58 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
- * Created by db-14 on 2017. 6. 17..
+ * Created by db-14 on 2017. 6. 19..
  */
 
-public class AccountEditActivity extends Activity implements View.OnClickListener {
+public class PlanEditActivity extends Activity implements View.OnClickListener {
 
-    EditText btitle, bprice;
-    TextView bDate;
-    Button edit_btn;
-    String usrid, pno, seqno;
-    String otitle, odate, oprice;
+    TextView tvToDate, tvFromDate;
+    EditText pname;
+    Button add_btn;
+    String usrid, pname_t, pno, sdate, fdate;
     DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
-    public static final String DATE_FORMAT = "EEE, MMM d, yyyy";
     int callerId = -1;
-    private Context ctx = this;
+    //  public static final String DATE_FORMAT = "yyyy/MM/dd";
+    public static final String DATE_FORMAT = "EEE, MMM d, yyyy";
 
+    private Context ctx = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bill_add);
-        btitle = (EditText) findViewById(R.id.bill_title);
-        bprice = (EditText) findViewById(R.id.bill_price);
-        bDate = (TextView) findViewById(R.id.billDate);
-        edit_btn = (Button) findViewById(R.id.bill_add_btn);
-
+        setContentView(R.layout.paln_add);
         usrid = getIntent().getStringExtra("USRID");
+        pname_t = getIntent().getStringExtra("PNAME");
         pno = getIntent().getStringExtra("PNO");
-        otitle = getIntent().getStringExtra("TITLE");
-        odate = getIntent().getStringExtra("DATE");
-        oprice = getIntent().getStringExtra("PRICE");
+        sdate = getIntent().getStringExtra("SDATE");
+        fdate = getIntent().getStringExtra("FDATE");
 
-        btitle.setText(otitle);
-        bprice.setText(oprice);
-        bDate.setText(odate);
+        pname = (EditText) findViewById(R.id.plan_name);
+        tvToDate = (TextView) findViewById(R.id.tvToDate);
+        tvToDate.setOnClickListener(this);
+        tvFromDate = (TextView) findViewById(R.id.tvFromDate);
+        tvFromDate.setOnClickListener(this);
+        add_btn = (Button) findViewById(R.id.add_ok_btn);
+        add_btn.setOnClickListener(this);
 
-        edit_btn.setOnClickListener(this);
-        bDate.setOnClickListener(this);
-
-
+        pname.setText(pname_t);
+        tvToDate.setText(sdate);
+        tvFromDate.setText(fdate);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.billDate:
+            case R.id.tvToDate:
                 TextView et = (TextView) view;
                 showDatePickerDialog(view.getId(), et.getText().toString().trim());
                 break;
-            case R.id.bill_add_btn:
+            case R.id.tvFromDate:
+                TextView et1 = (TextView) view;
+                showDatePickerDialog(view.getId(), et1.getText().toString().trim());
+                break;
+            case R.id.add_ok_btn:
                 Intent in = new Intent();
-                editBillDB(pno, btitle.getText().toString(),bprice.getText().toString(), bDate.getText().toString());
+                editPlanDB(pname.getText().toString(), tvToDate.getText().toString(), tvFromDate.getText().toString());
                 setResult(RESULT_OK, in);
                 finish();
         }
@@ -117,7 +122,7 @@ public class AccountEditActivity extends Activity implements View.OnClickListene
                 handleOnDateSet(year, month, day);
             }
         }, year, month, day);
-        datePicker.setTitle("날짜 선택");
+        datePicker.setTitle("날짜를 선택하세요.");
         datePicker.setButton(DatePickerDialog.BUTTON_POSITIVE, "Ok", datePicker);
         datePicker.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -139,26 +144,29 @@ public class AccountEditActivity extends Activity implements View.OnClickListene
         Date date = new GregorianCalendar(year, month, day).getTime();
         String myear, mmonth, mday;
         myear = String.valueOf(year);
-        mmonth = (month + 1 < 10) ? "0" + String.valueOf(month + 1) : String.valueOf(month + 1);
-        mday = (day < 10) ? "0" + String.valueOf(day) : String.valueOf(day);
-        String formatedDate = myear + mmonth + mday;
+        mmonth = (month+1 < 10) ? "0"+String.valueOf(month+1) : String.valueOf(month+1);
+        mday = (day<10) ? "0"+String.valueOf(day) : String.valueOf(day);
+        String formatedDate = myear+mmonth+mday;
 
         switch (callerId) {
-            case R.id.billDate:
-                bDate.setText(formatedDate);
+            case R.id.tvToDate:
+                tvToDate.setText(formatedDate);
+                break;
+            case R.id.tvFromDate:
+                tvFromDate.setText(formatedDate);
                 break;
         }
     }
 
-    protected void editBillDB(String pno, String btitle, String bprice, String bdate)
+    protected void editPlanDB(String new_pname, String n_sdate, String n_fdate)
     {
         try{
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost("http://52.79.131.13/db_update.php");
 
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-            String query = "update bill_info set bill='"+btitle+"', price="+bprice+", date="+bdate
-                    + " where pno="+pno+" and bill='"+otitle+"' and price="+oprice+" and date='"+odate+"'";
+            String query = "update plan set pname='"+new_pname+"', sdate="+n_sdate+", fdate="+n_fdate
+                    + " where planno="+pno+" and pname='"+pname_t+"' and usrid='"+usrid+"'";
             nameValuePairs.add(new BasicNameValuePair("query", query));
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
             HttpResponse response = httpClient.execute(httpPost);
@@ -173,6 +181,4 @@ public class AccountEditActivity extends Activity implements View.OnClickListene
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
-
-
 }
