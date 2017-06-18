@@ -33,8 +33,6 @@ import org.json.simple.parser.JSONParser;
 import java.io.BufferedInputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.example.db_14.travelplanner.R.id.acc_date;
@@ -53,10 +51,7 @@ public class AccountActivity extends Activity implements View.OnClickListener, A
     TextView total, stitle;
     private ArrayList<AccountData> blist;
     AccuAdapter adapter;
-    private HashMap<String, String> ainfo;
-    int is_add, is_remove;
-    int func=0;
-    Date date;
+    int is_remove;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +86,7 @@ public class AccountActivity extends Activity implements View.OnClickListener, A
                 Intent in = new Intent(AccountActivity.this, AccountAddActivity.class);
                 in.putExtra("USRID", usrid);
                 in.putExtra("PNO", pno);
-                in.putExtra("SEQNO", String.valueOf(blist.size()+1));
                 startActivityForResult(in, 1);
-                func=1;
                 break;
             case R.id.removeaccu:
                 Toast.makeText(this, "삭제할 항목을 선택하세요.", Toast.LENGTH_SHORT).show();
@@ -109,7 +102,7 @@ public class AccountActivity extends Activity implements View.OnClickListener, A
             HttpPost httpPost = new HttpPost("http://52.79.131.13/db_delete.php");
 
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-            String query = "delete from bill_info where pno="+pno+" and date='"+data.date+"' and bill='"+data.title+"' and price="+data.price; // 쿼리문 수정 및 db 테이블 추가 필요
+            String query = "delete from bill_info where pno="+pno+" and date='"+data.date+"' and bill='"+data.title+"' and price="+data.price;
             nameValuePairs.add(new BasicNameValuePair("query", query));
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
             HttpResponse response = httpClient.execute(httpPost);
@@ -130,21 +123,10 @@ public class AccountActivity extends Activity implements View.OnClickListener, A
         {
             if(result==RESULT_OK)
             {
-                switch (func)
-                {
-                    case 1:
-                        blist.clear();
-                        getAccountlist(pno);
-                        adapter.notifyDataSetChanged();
-                        getTotal(blist);
-                        break;
-                    case 2:
-                        blist.clear();
-                        getAccountlist(pno);
-                        adapter.notifyDataSetChanged();
-                        getTotal(blist);
-                        break;
-                }
+                blist.clear();
+                getAccountlist(pno);
+                adapter.notifyDataSetChanged();
+                getTotal(blist);
             }
         }
     }
@@ -221,10 +203,10 @@ public class AccountActivity extends Activity implements View.OnClickListener, A
         }
 
         Intent intent = new Intent(AccountActivity.this, AccountEditActivity.class);
+        intent.putExtra("PNO", pno);
         intent.putExtra("TITLE", blist.get(position).title);
         intent.putExtra("DATE", blist.get(position).date);
         intent.putExtra("PRICE", blist.get(position).price);
-        func=2;
         startActivityForResult(intent, 1);
     }
 

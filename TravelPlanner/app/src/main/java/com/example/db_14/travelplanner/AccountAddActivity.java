@@ -153,7 +153,7 @@ public class AccountAddActivity extends Activity implements View.OnClickListener
             HttpPost httpPost = new HttpPost("http://52.79.131.13/db_insert.php");
 
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-            String query = "insert into bill_info(pno, seqno, date, usrid, bill, price) values ('"+pno+"','"+seqno+"','"+bdate+"','"+usrid+"','"+btitle+"','"+bprice+"')"; // 쿼리문 수정 및 db 테이블 추가 필요
+            String query = "insert into bill_info(pno, date, usrid, bill, price) values ('"+pno+"','"+bdate+"','"+usrid+"','"+btitle+"','"+bprice+"')"; // 쿼리문 수정 및 db 테이블 추가 필요
             nameValuePairs.add(new BasicNameValuePair("query", query));
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
             HttpResponse response = httpClient.execute(httpPost);

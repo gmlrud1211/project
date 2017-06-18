@@ -11,9 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.tsengvn.typekit.TypekitContextWrapper;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -23,7 +21,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +39,7 @@ public class AccountEditActivity extends Activity implements View.OnClickListene
     TextView bDate;
     Button edit_btn;
     String usrid, pno, seqno;
+    String otitle, odate, oprice;
     DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
     public static final String DATE_FORMAT = "EEE, MMM d, yyyy";
     int callerId = -1;
@@ -58,11 +56,13 @@ public class AccountEditActivity extends Activity implements View.OnClickListene
 
         usrid = getIntent().getStringExtra("USRID");
         pno = getIntent().getStringExtra("PNO");
-        seqno = getIntent().getStringExtra("SEQNO");
+        otitle = getIntent().getStringExtra("TITLE");
+        odate = getIntent().getStringExtra("DATE");
+        oprice = getIntent().getStringExtra("PRICE");
 
-        btitle.setText(getIntent().getStringExtra("TITLE"));
-        bprice.setText(getIntent().getStringExtra("PRICE"));
-        bDate.setText(getIntent().getStringExtra("DATE"));
+        btitle.setText(otitle);
+        bprice.setText(oprice);
+        bDate.setText(odate);
 
         edit_btn.setOnClickListener(this);
         bDate.setOnClickListener(this);
@@ -157,7 +157,8 @@ public class AccountEditActivity extends Activity implements View.OnClickListene
             HttpPost httpPost = new HttpPost("http://52.79.131.13/db_insert.php");
 
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-            String query = "update bill_info set bill='"+btitle+"', price="+bprice+", date="+bdate+" where pno="+pno; // 쿼리문 수정 및 db 테이블 추가 필요
+            String query = "update bill_info set bill='"+btitle+"', price="+bprice+", date="+bdate
+                    + " where pno="+pno+" and bill='"+otitle+"' and price="+oprice+" and date='"+odate+"'";
             nameValuePairs.add(new BasicNameValuePair("query", query));
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
             HttpResponse response = httpClient.execute(httpPost);

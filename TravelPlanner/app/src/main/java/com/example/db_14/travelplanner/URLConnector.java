@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class URLConnector {
 
     String base = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/";
-    String TOURKEY = "ServiceKey=dx6Je9L%2FluhYWHKwoLx0GoEk7VvDKF0ABstzCLgfe7MJIFpFQ3EhtGGs1TfPkuqbScvzFxVxbLjcrMrztNFV2w%3D%3D&MobileOS=AND&MobileApp=TravelPlanner&numOfRows=50&_type=json";
+    String TOURKEY = "ServiceKey=dx6Je9L%2FluhYWHKwoLx0GoEk7VvDKF0ABstzCLgfe7MJIFpFQ3EhtGGs1TfPkuqbScvzFxVxbLjcrMrztNFV2w%3D%3D&MobileOS=AND&MobileApp=TravelPlanner&numOfRows=100&_type=json";
     String sinfo_opt = "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y";
     ArrayList<HashMap<String, String>> dList;  // 결과값 담아줄 arraylist
 

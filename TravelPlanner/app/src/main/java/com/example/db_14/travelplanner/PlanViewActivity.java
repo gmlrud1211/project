@@ -151,9 +151,15 @@ public class PlanViewActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 tMapView.removeTMapPath();
+                for (int i = 0; i <points.size(); i++) {
+                    tMapView.getMarkerItemFromID("marker" + Integer.toString(i)).
+                            setIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.marker));
+                }
+
+                tMapView.getMarkerItemFromID("marker" + Integer.toString(position)).
+                        setIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.end_marker));
             }
         });
-
     }
 
     public void getPlanlist(String pno)
@@ -274,4 +280,3 @@ public class PlanViewActivity extends Activity {
         }
     }
 }
-
