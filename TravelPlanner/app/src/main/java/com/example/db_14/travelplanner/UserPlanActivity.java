@@ -208,6 +208,7 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
                 plans.clear();
                 getPlan(usrid);
                 adapter.notifyDataSetChanged();
+                is_edit=0;
             }
         }
     }

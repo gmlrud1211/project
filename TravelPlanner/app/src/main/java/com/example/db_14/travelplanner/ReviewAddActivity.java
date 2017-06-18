@@ -1,24 +1,14 @@
-﻿package com.example.db_14.travelplanner;
+package com.example.db_14.travelplanner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -84,6 +74,7 @@ public class ReviewAddActivity extends Activity {
         try{
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost("http://52.79.131.13/db_insert.php");
+
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
             String query = "insert into review_info(pno, usrid, text) values ('"+pno+"','"+usrid+"','"+subtext+"')"; // 쿼리문 수정 및 db 테이블 추가 필요
             nameValuePairs.add(new BasicNameValuePair("query", query));
@@ -95,5 +86,10 @@ public class ReviewAddActivity extends Activity {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }

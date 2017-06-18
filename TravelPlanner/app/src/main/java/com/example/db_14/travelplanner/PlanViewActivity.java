@@ -186,7 +186,10 @@ public class PlanViewActivity extends Activity {
                         deletesight(slist.get(position).contentid);
                         slist.clear();
                         points.clear();
+                        markers.clear();
                         tMapView.removeAllMarkerItem();
+                        tMapView.removeTMapPath();
+                        tMapView.ClearTile();
                         getPlanlist(pno);
 
                         for (int i=0; i<points.size(); i++)
