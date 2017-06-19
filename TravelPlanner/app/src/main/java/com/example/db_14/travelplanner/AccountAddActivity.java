@@ -51,12 +51,14 @@ public class AccountAddActivity extends Activity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bill_add);
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "UserInfo.db", null, 1);
+        usrid = dbHelper.getResult().get("usrid");
+
         btitle = (EditText) findViewById(R.id.bill_title);
         bprice = (EditText) findViewById(R.id.bill_price);
         bDate = (TextView) findViewById(R.id.billDate);
         add_btn = (Button) findViewById(R.id.bill_add_btn);
 
-        usrid = getIntent().getStringExtra("USRID");
         pno = getIntent().getStringExtra("PNO");
         seqno = getIntent().getStringExtra("SEQNO");
 

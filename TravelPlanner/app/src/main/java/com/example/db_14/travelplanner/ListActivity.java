@@ -45,7 +45,6 @@ public class ListActivity extends Activity {
                 Intent intent = new Intent(ListActivity.this, SigunguActivity.class);
                 intent.putExtra("areaCode", areaList.get(i).get("code"));
                 intent.putExtra("ContentTypeId", contenttypeid);
-                intent.putExtra("usrid", getIntent().getStringExtra("usrid"));
                 startActivity(intent);
             }
         });

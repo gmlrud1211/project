@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,13 +36,13 @@ public class ReviewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_main);
-
         review_activity_main = (ListView)findViewById(R.id.review_activity_main);
+        Button btn = (Button) findViewById(R.id.removereview);
+        btn.setVisibility(View.INVISIBLE);
+
         rlist = new ArrayList<ReviewListViewItem>();
 
         getReview();
-
-
 
         adapter = new RListAdapter(getApplicationContext(),rlist);
         review_activity_main.setAdapter(adapter);

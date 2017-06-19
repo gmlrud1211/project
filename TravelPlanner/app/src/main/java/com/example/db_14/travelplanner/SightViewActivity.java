@@ -36,6 +36,7 @@ public class SightViewActivity extends Activity {
     Button map, bookmark, addplan;
     ImageView image;
     String ovStr, contentid;
+    String usrid;
     HashMap<String, String> sightinfo = new HashMap<String, String>();
     ArrayList<HashMap<String, String>> sight = new ArrayList<HashMap<String, String>>();
 
@@ -43,6 +44,9 @@ public class SightViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_sight);
+
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "UserInfo.db", null, 1);
+        usrid = dbHelper.getResult().get("usrid");
 
         titleview = (TextView) findViewById(R.id.sight_title);
         overview = (TextView) findViewById(R.id.sight_overview);
@@ -62,6 +66,10 @@ public class SightViewActivity extends Activity {
         sight = conn.getList();
         if(sight.get(0).get("overview")!=null) ovStr = sight.get(0).get("overview");
         else ovStr = "";
+
+        ovStr.replace("<br>", "");
+        ovStr.replace("<br />", "");
+        ovStr.replace("<BR>", "");
 
         titleview.setText(sight.get(0).get("title"));
         overview.setText(ovStr);
@@ -97,7 +105,7 @@ public class SightViewActivity extends Activity {
                     HttpPost httpPost = new HttpPost("http://52.79.131.13/db_insert.php");
 
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-                    String query = "insert into bookmark (usrid, p_code, sname) values ('"+getIntent().getStringExtra("usrid")+"', "+contentid+", '"+sight.get(0).get("title")+"')";
+                    String query = "insert into bookmark (usrid, p_code, sname) values ('"+usrid+"', "+contentid+", '"+sight.get(0).get("title")+"')";
                     nameValuePairs.add(new BasicNameValuePair("query", query));
                     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
                     HttpResponse response = httpClient.execute(httpPost);
@@ -121,7 +129,6 @@ public class SightViewActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent in = new Intent(SightViewActivity.this, UserPlanActivity.class);
-                in.putExtra("USRID", getIntent().getStringExtra("usrid"));
                 in.putExtra("ADDPLAN", 1);
                 in.putExtra("SIGHTTITLE", sight.get(0).get("title"));
                 in.putExtra("LAT", sight.get(0).get("mapy"));

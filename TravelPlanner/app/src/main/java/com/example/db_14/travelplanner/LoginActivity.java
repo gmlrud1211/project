@@ -45,15 +45,14 @@ public class LoginActivity extends Activity {
     EditText usr_pwd;
     Button login;
     Button signup;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
+        dbHelper = new DBHelper(getApplicationContext(), "UserInfo.db", null, 1);
         usr_id = (EditText)findViewById(R.id.user_id);
         usr_pwd = (EditText)findViewById(R.id.user_pwd);
         signup = (Button)findViewById(R.id.signup);
@@ -62,6 +61,11 @@ public class LoginActivity extends Activity {
         dialog.setCancelable(true);
         dialog.addContentView(new ProgressBar(this), new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
+        if(dbHelper.getResult().get("isLogin").equals("y")) {
+            Intent in = new Intent(LoginActivity.this, MainUIActivity.class);
+            startActivity(in);
+            finish();
+        }
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,7 +124,7 @@ public class LoginActivity extends Activity {
                 });
 
                 Intent intent = new Intent(LoginActivity.this, MainUIActivity.class);
-                intent.putExtra("USRID", usr_id.getText().toString());
+                dbHelper.insert(usr_id.getText().toString(), "y");
                 startActivity(intent);
                 finish();
             }

@@ -73,7 +73,6 @@ public class PlanViewActivity extends Activity {
         planlist = (ListView) findViewById(R.id.planv_list);
         shortpath = (Button) findViewById(R.id.shortpath);
         addreview = (Button) findViewById(R.id.addreview);
-        editplan = (Button) findViewById(R.id.editplan);
 
         slist = new ArrayList<SightData>();
         points = new ArrayList<TMapPoint>();
@@ -156,7 +155,6 @@ public class PlanViewActivity extends Activity {
                 Intent in = new Intent(PlanViewActivity.this, ReviewAddActivity.class);
                 in.putExtra("PNO", pno);
                 in.putExtra("PNAME", pname.getText().toString());
-                in.putExtra("USRID", getIntent().getStringExtra("USRID"));
                 startActivity(in);
             }
         });

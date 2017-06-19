@@ -52,7 +52,8 @@ public class PlanEditActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.paln_add);
-        usrid = getIntent().getStringExtra("USRID");
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "UserInfo.db", null, 1);
+        usrid = dbHelper.getResult().get("usrid");
         pname_t = getIntent().getStringExtra("PNAME");
         pno = getIntent().getStringExtra("PNO");
         sdate = getIntent().getStringExtra("SDATE");

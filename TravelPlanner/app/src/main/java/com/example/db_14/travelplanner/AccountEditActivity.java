@@ -38,7 +38,7 @@ public class AccountEditActivity extends Activity implements View.OnClickListene
     EditText btitle, bprice;
     TextView bDate;
     Button edit_btn;
-    String usrid, pno, seqno;
+    String usrid, pno;
     String otitle, odate, oprice;
     DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
     public static final String DATE_FORMAT = "EEE, MMM d, yyyy";
@@ -49,12 +49,13 @@ public class AccountEditActivity extends Activity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bill_add);
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "UserInfo.db", null, 1);
+        usrid = dbHelper.getResult().get("usrid");
         btitle = (EditText) findViewById(R.id.bill_title);
         bprice = (EditText) findViewById(R.id.bill_price);
         bDate = (TextView) findViewById(R.id.billDate);
         edit_btn = (Button) findViewById(R.id.bill_add_btn);
 
-        usrid = getIntent().getStringExtra("USRID");
         pno = getIntent().getStringExtra("PNO");
         otitle = getIntent().getStringExtra("TITLE");
         odate = getIntent().getStringExtra("DATE");

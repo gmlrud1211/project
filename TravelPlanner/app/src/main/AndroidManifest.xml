@@ -23,7 +23,6 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".TourActivity" />
         <activity android:name=".ListActivity" />
         <activity android:name=".SigunguActivity" />
         <activity android:name=".SightsActivity" />
@@ -39,6 +38,7 @@
         <activity android:name=".ReviewActivity"/>
         <activity android:name=".ReviewAddActivity"/>
         <activity android:name=".PlanEditActivity"/>
+        <activity android:name=".MyReviewActivity"/>
         <activity
             android:name=".MainUIActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

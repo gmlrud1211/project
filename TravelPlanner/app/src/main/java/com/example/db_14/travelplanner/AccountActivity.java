@@ -57,6 +57,9 @@ public class AccountActivity extends Activity implements View.OnClickListener, A
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "UserInfo.db", null, 1);
+        usrid = dbHelper.getResult().get("usrid");
+
         accuview = (ListView) findViewById(R.id.account_list);
         total = (TextView) findViewById(R.id.account_total);
         stitle = (TextView) findViewById(R.id.account_title);
@@ -66,7 +69,6 @@ public class AccountActivity extends Activity implements View.OnClickListener, A
         blist = new ArrayList<AccountData>();
         pno = getIntent().getStringExtra("PLANNO");
         stitle.setText(getIntent().getStringExtra("PNAME"));
-        usrid = getIntent().getStringExtra("USRID");
 
         getAccountlist(pno);
 
@@ -84,7 +86,6 @@ public class AccountActivity extends Activity implements View.OnClickListener, A
         switch (view.getId()) {
             case R.id.addaccu:
                 Intent in = new Intent(AccountActivity.this, AccountAddActivity.class);
-                in.putExtra("USRID", usrid);
                 in.putExtra("PNO", pno);
                 startActivityForResult(in, 1);
                 break;

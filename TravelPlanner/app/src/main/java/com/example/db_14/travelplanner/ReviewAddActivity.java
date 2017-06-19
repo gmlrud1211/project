@@ -42,7 +42,8 @@ public class ReviewAddActivity extends Activity {
         add_btn = (Button)findViewById(R.id.add_ok_btn);
         pno = getIntent().getStringExtra("PNO");
         pname = getIntent().getStringExtra("PNAME");
-        usrid = getIntent().getStringExtra("USRID");
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "UserInfo.db", null, 1);
+        usrid = dbHelper.getResult().get("usrid");
 
         add_btn.setOnClickListener(new View.OnClickListener() {
             View.OnClickListener cListener = new View.OnClickListener() {

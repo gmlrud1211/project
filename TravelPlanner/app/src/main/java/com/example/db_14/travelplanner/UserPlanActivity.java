@@ -53,12 +53,14 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "UserInfo.db", null, 1);
+        usrid = dbHelper.getResult().get("usrid");
+
         add_plan = (Button)findViewById(R.id.addplan);
         remove_plan = (Button)findViewById(R.id.removeplan);
         add_plan.setOnClickListener(this);
         remove_plan.setOnClickListener(this);
 
-        usrid = getIntent().getStringExtra("USRID");
         is_add = getIntent().getIntExtra("ADDPLAN", 0);
         is_bill = getIntent().getIntExtra("ISBILL", 0);
 
@@ -87,7 +89,6 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent in = new Intent(UserPlanActivity.this, PlanEditActivity.class);
-                in.putExtra("USRID", usrid);
                 in.putExtra("PNAME", plans.get(position).pname);
                 in.putExtra("PNO", plans.get(position).pno);
                 in.putExtra("SDATE", plans.get(position).sdate);
@@ -166,7 +167,6 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
             Intent intent = new Intent(UserPlanActivity.this, AccountActivity.class);
             intent.putExtra("PLANNO", plans.get(position).pno);
             intent.putExtra("PNAME", plans.get(position).pname);
-            intent.putExtra("USRID", usrid);
             startActivity(intent);
             return;
         }
@@ -179,7 +179,6 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
         intent.putExtra("SDATE", plans.get(position).sdate);
         intent.putExtra("FDATE", plans.get(position).fdate);
         intent.putExtra("PNAME", plans.get(position).pname);
-        intent.putExtra("USRID", usrid);
         startActivity(intent);
     }
 
@@ -242,7 +241,6 @@ public class UserPlanActivity extends Activity implements AdapterView.OnItemClic
         switch (view.getId()) {
             case R.id.addplan:
                 Intent in = new Intent(UserPlanActivity.this, PlanAddActivity.class);
-                in.putExtra("USRID", usrid);
                 startActivityForResult(in, 1);
                 func=1;
                 break;

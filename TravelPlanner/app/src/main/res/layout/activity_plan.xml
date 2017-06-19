@@ -26,7 +26,7 @@
         <Button
             android:id="@+id/removeplan"
             android:layout_width="70dp"
-            android:layout_height="15dp"
+            android:layout_height="20dp"
             android:background="@drawable/button_background"
             android:gravity="center"
             android:text="계획삭제"
@@ -40,7 +40,7 @@
         <Button
             android:id="@+id/addplan"
             android:layout_width="70dp"
-            android:layout_height="15dp"
+            android:layout_height="20dp"
             android:background="@drawable/button_background"
             android:gravity="center"
             android:text="계획추가"

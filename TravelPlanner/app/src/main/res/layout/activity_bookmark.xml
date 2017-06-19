@@ -23,7 +23,7 @@
         <Button
             android:id="@+id/delete_b"
             android:layout_width="70dp"
-            android:layout_height="15dp"
+            android:layout_height="20dp"
             android:background="@drawable/button_background"
             android:gravity="center"
             android:text="삭제"

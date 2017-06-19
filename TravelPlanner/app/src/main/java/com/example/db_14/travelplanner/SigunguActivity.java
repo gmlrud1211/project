@@ -51,7 +51,6 @@ public class SigunguActivity extends Activity {
                 intent.putExtra("areaCode", areaCode);
                 intent.putExtra("sigunguCode", sigunguList.get(i).get("code"));
                 intent.putExtra("ContentTypeId", contenttypeid);
-                intent.putExtra("usrid", getIntent().getStringExtra("usrid"));
                 startActivity(intent);
             }
         });
