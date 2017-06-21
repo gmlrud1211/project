@@ -141,6 +141,7 @@
                 android:layout_height="120dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
+                android:onClick="onClick"
                 app:srcCompat="@drawable/recommend" />
             <TextView
                 android:id="@+id/recommendt"
