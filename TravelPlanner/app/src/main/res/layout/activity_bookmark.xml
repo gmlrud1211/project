@@ -9,6 +9,7 @@
         android:background="#4ba8ff">
 
         <TextView
+            android:id="@+id/bookmark_title"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentLeft="true"

@@ -3,7 +3,9 @@ package com.example.db_14.travelplanner;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.skp.Tmap.TMapInfo;
+import com.skp.Tmap.TMapMarkerItem;
 import com.skp.Tmap.TMapPoint;
 import com.skp.Tmap.TMapPolyLine;
 import com.skp.Tmap.TMapView;
@@ -39,6 +42,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.graphics.Paint.ANTI_ALIAS_FLAG;
+import static com.example.db_14.travelplanner.R.drawable.marker;
 import static com.example.db_14.travelplanner.R.drawable.start_marker;
 
 /**
@@ -51,7 +56,8 @@ public class FirstFragment  extends Fragment{
     int like;
     String APPKEY = "2cfca2bc-7f91-3031-b69d-3c7eed12970c";
     ArrayList<SightData> slist;
-    ArrayList<TMapPoint> points;
+    ArrayList<TMapPoint> points, labels;
+    Bitmap s_marker, e_marker, path;
     Button bt;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,15 +73,32 @@ public class FirstFragment  extends Fragment{
         final TMapView tMapView = new TMapView(v.getContext());
         tMapView.setSKPMapApiKey(APPKEY);
         mapLayout.addView(tMapView);
-        Bitmap s_marker = BitmapFactory.decodeResource(v.getContext().getResources(), start_marker);
-        Bitmap e_marker = BitmapFactory.decodeResource(v.getContext().getResources(), R.drawable.end_marker);
-        Bitmap path = BitmapFactory.decodeResource(v.getContext().getResources(), R.drawable.marker);
+        s_marker = BitmapFactory.decodeResource(v.getContext().getResources(), start_marker);
+        e_marker = BitmapFactory.decodeResource(v.getContext().getResources(), R.drawable.end_marker);
+        path = BitmapFactory.decodeResource(v.getContext().getResources(), marker);
         tMapView.setTMapPathIcon(s_marker, e_marker, path);
 
         if (points.size()>=0) {
             TMapInfo inf1 = tMapView.getDisplayTMapInfo(points);
             tMapView.setCenterPoint(inf1.getTMapPoint().getLongitude(), inf1.getTMapPoint().getLatitude());
             tMapView.setZoomLevel(10);
+        }
+
+        for (int i=0; i<points.size(); i++)
+        {
+            TMapMarkerItem item = new TMapMarkerItem();
+            item.setTMapPoint(points.get(i));
+            item.setVisible(TMapMarkerItem.VISIBLE);
+            item.setIcon(path);
+            item.setPosition((float) 0.5, (float) 1.0);
+            tMapView.addMarkerItem("marker" + Integer.toString(i), item);
+            TMapMarkerItem label = new TMapMarkerItem();
+            label.setTMapPoint(points.get(i));
+            label.setVisible(TMapMarkerItem.VISIBLE);
+            Bitmap bitmap2 = StringToBitMap(slist.get(i).getSight());
+            label.setIcon(bitmap2);
+            label.setPosition((float) 0.5, (float) 3.25);
+            tMapView.addMarkerItem("label" + Integer.toString(i), label);
         }
 
         TMapPolyLine line = new TMapPolyLine();
@@ -218,6 +241,21 @@ public class FirstFragment  extends Fragment{
         }
 
         return Integer.parseInt(rlike);
+    }
+
+    public Bitmap StringToBitMap(String text){
+        Paint paint = new Paint(ANTI_ALIAS_FLAG);
+        paint.setTextSize(20);
+        paint.setColor(Color.BLACK);
+        paint.setTextAlign(Paint.Align.LEFT);
+        float baseline = -paint.ascent(); // ascent() is negative
+        int width = (int) (paint.measureText(text) + 1.0f); // round
+        int height = (int) (baseline + paint.descent() + 1.0f);
+        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(image);
+        canvas.drawColor(Color.WHITE);
+        canvas.drawText(text, 0, baseline, paint);
+        return image;
     }
 
 }

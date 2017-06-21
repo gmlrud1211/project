@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +21,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.skp.Tmap.TMapData;
 import com.skp.Tmap.TMapInfo;
 import com.skp.Tmap.TMapMarkerItem;
 import com.skp.Tmap.TMapPoint;
@@ -45,6 +46,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 import static com.example.db_14.travelplanner.R.drawable.marker;
 import static com.example.db_14.travelplanner.R.drawable.start_marker;
 
@@ -53,26 +55,30 @@ import static com.example.db_14.travelplanner.R.drawable.start_marker;
  */
 
 public class PlanViewActivity extends Activity {
-    String APPKEY = "2cfca2bc-7f91-3031-b69d-3c7eed12970c";
+    String APPKEY = "2cfca2bc-7f91-3031-b69d-3c7eed12970c", usrid;
     TextView pname;
     ListView planlist;
     String sdate, fdate, pno;
     ArrayList<SightData> slist;
     ArrayList<TMapPoint> points;
-    Button shortpath, addreview;
+    Button shortpath, addreview, addTraveler;
     ListAdapter adapter;
     ArrayList<TMapMarkerItem> markers;
+    ArrayList<TMapMarkerItem> labels;
     CustomDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_view);
+        DBHelper dbHelper = new DBHelper(getApplicationContext(), "UserInfo.db", null, 1);
+        usrid = dbHelper.getResult().get("usrid");
         TextView addsight = (TextView) findViewById(R.id.sight_add);
         pname = (TextView) findViewById(R.id.planv_pname);
         planlist = (ListView) findViewById(R.id.planv_list);
         shortpath = (Button) findViewById(R.id.shortpath);
         addreview = (Button) findViewById(R.id.addreview);
+        addTraveler = (Button) findViewById(R.id.addTraveler);
 
         slist = new ArrayList<SightData>();
         points = new ArrayList<TMapPoint>();
@@ -89,6 +95,7 @@ public class PlanViewActivity extends Activity {
         Bitmap s_marker = BitmapFactory.decodeResource(getApplicationContext().getResources(), start_marker);
         Bitmap e_marker = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.end_marker);
         markers = new ArrayList<TMapMarkerItem>();
+        labels = new ArrayList<TMapMarkerItem>();
         tMapView.setTMapPathIcon(s_marker, e_marker);
 
         for (int i=0; i<points.size(); i++)
@@ -96,12 +103,19 @@ public class PlanViewActivity extends Activity {
             TMapMarkerItem item = new TMapMarkerItem();
             item.setTMapPoint(points.get(i));
             item.setVisible(TMapMarkerItem.VISIBLE);
-            Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), marker);
-            item.setIcon(bitmap);
+            Bitmap bitmap1 = BitmapFactory.decodeResource(getApplicationContext().getResources(), marker);
+            item.setIcon(bitmap1);
             item.setPosition((float) 0.5, (float) 1.0);
-            // 마커 설정
             markers.add(item);
             tMapView.addMarkerItem("marker" + Integer.toString(i), markers.get(i));
+            TMapMarkerItem label = new TMapMarkerItem();
+            label.setTMapPoint(points.get(i));
+            label.setVisible(TMapMarkerItem.VISIBLE);
+            Bitmap bitmap2 = StringToBitMap(slist.get(i).getSight());
+            label.setIcon(bitmap2);
+            label.setPosition((float) 0.5, (float) 3.25);
+            labels.add(label);
+            tMapView.addMarkerItem("label" + Integer.toString(i), labels.get(i));
         }
 
         adapter = new ListAdapter(getApplicationContext(), slist);
@@ -119,8 +133,6 @@ public class PlanViewActivity extends Activity {
 
                 ArrayList<TMapPoint> opt = new ArrayList<TMapPoint>();
                 TMapPolyLine line = new TMapPolyLine();
-                TMapData data = new TMapData();
-                TMapPoint start, end;
 
                 if (points.size() < 2) {
                     Toast.makeText(getApplicationContext(), "여행지 수가 너무 적습니다", Toast.LENGTH_SHORT).show();
@@ -144,7 +156,6 @@ public class PlanViewActivity extends Activity {
                 line.setLineWidth(6);
                 line.setOutLineWidth(0);
                 line.setLineColor(Color.RED);
-
                 tMapView.addTMapPath(line);
             }
         });
@@ -159,10 +170,19 @@ public class PlanViewActivity extends Activity {
             }
         });
 
+        addTraveler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InviteDialog dialog = new InviteDialog(v.getContext(), usrid, pno);
+                dialog.show();
+            }
+        });
+
         planlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 tMapView.removeTMapPath();
+
                 for (int i = 0; i <points.size(); i++) {
                     tMapView.getMarkerItemFromID("marker" + Integer.toString(i)).
                             setIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), marker));
@@ -185,6 +205,7 @@ public class PlanViewActivity extends Activity {
                         slist.clear();
                         points.clear();
                         markers.clear();
+                        labels.clear();
                         tMapView.removeAllMarkerItem();
                         tMapView.removeTMapPath();
                         tMapView.ClearTile();
@@ -198,9 +219,16 @@ public class PlanViewActivity extends Activity {
                             Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), marker);
                             item.setIcon(bitmap);
                             item.setPosition((float) 0.5, (float) 1.0);
-                            // 마커 설정
                             markers.add(item);
                             tMapView.addMarkerItem("marker" + Integer.toString(i), markers.get(i));
+                            TMapMarkerItem label = new TMapMarkerItem();
+                            label.setTMapPoint(points.get(i));
+                            label.setVisible(TMapMarkerItem.VISIBLE);
+                            Bitmap bitmap2 = StringToBitMap(slist.get(i).getSight());
+                            label.setIcon(bitmap2);
+                            label.setPosition((float) 0.5, (float) 3.25);
+                            labels.add(label);
+                            tMapView.addMarkerItem("label" + Integer.toString(i), labels.get(i));
                         }
 
                         adapter.notifyDataSetChanged();
@@ -339,5 +367,20 @@ public class PlanViewActivity extends Activity {
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public Bitmap StringToBitMap(String text){
+        Paint paint = new Paint(ANTI_ALIAS_FLAG);
+        paint.setTextSize(20);
+        paint.setColor(Color.BLACK);
+        paint.setTextAlign(Paint.Align.LEFT);
+        float baseline = -paint.ascent(); // ascent() is negative
+        int width = (int) (paint.measureText(text) + 1.0f); // round
+        int height = (int) (baseline + paint.descent() + 1.0f);
+        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(image);
+        canvas.drawColor(Color.WHITE);
+        canvas.drawText(text, 0, baseline, paint);
+        return image;
     }
 }

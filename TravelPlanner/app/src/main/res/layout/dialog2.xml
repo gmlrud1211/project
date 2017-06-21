@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@android:color/transparent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text="계획에 초대하시겠습니까?"
+            android:textColor="#000000"
+            android:textSize="15dp"/>
+        <EditText
+            android:id="@+id/invite_id"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:hint="아이디를 입력해주세요"
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"/>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btn_invite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitCenter"
+                android:text="확인"
+                android:layout_margin="10dp"
+                android:background="@drawable/bluebtn_background"
+                android:textColor="#ffffff"/>
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="취소"
+                android:layout_margin="10dp"
+                android:scaleType="fitCenter"
+                android:background="@drawable/bluebtn_background"
+                android:textColor="#ffffff"/>
+        </TableRow>
+    </LinearLayout>
+
+</LinearLayout>
