@@ -4,17 +4,6 @@
     android:layout_height="match_parent"
     android:background="#ffffff">
 
-    <TextView
-        android:id="@+id/sight_title"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="20dp"
-        android:background="#4ba8ff"
-        android:textColor="#ffffff"
-        android:text="TITLE"
-        android:gravity="center"
-        android:textStyle="bold"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -22,7 +22,6 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +30,7 @@ import java.util.List;
  * Created by a0104 on 2017-02-13.
  */
 
-public class SightViewActivity extends Activity implements Serializable {
+public class SightViewActivity extends Activity {
 
     TextView titleview, overview, addr;
     Button map, bookmark, addplan, course;
@@ -152,6 +151,18 @@ public class SightViewActivity extends Activity implements Serializable {
                 in.putExtra("CONTENTID", contentid);
                 startActivity(in);
                 finish();
+            }
+        });
+
+        course.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                URLConnector conn = new URLConnector();
+                ArrayList<SightListViewItem> sightsList = conn.APIsightDetailInfo("detailInfo?",contentid);
+
+                Intent intent = new Intent(SightViewActivity.this, SightViewDetailActivity.class);
+                intent.putExtra("sightDetailInfo", sightsList);
+                startActivity(intent);
             }
         });
     }

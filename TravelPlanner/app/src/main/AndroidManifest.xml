@@ -42,6 +42,7 @@
         <activity android:name=".ReviewActivity" />
         <activity android:name=".ReviewAddActivity" />
         <activity android:name=".PlanEditActivity" />
+        <activity android:name=".SightViewDetailActivity"/>
         <activity android:name=".MyReviewActivity" />
         <activity
             android:name=".MainUIActivity"

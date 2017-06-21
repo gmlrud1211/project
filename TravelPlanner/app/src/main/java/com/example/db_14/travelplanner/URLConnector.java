@@ -109,11 +109,17 @@ public class URLConnector {
 
             data = new HashMap<String, String>();
 
-            String overview = item.get("overview").toString();
+            String overview;
             String mapx = item.get("mapx").toString();
             String mapy = item.get("mapy").toString();
             String firstimage;
             String addr1;
+
+
+            if(item.get("overview")!=null)
+                overview = item.get("overview").toString();
+            else
+                overview = "overview not Found";
 
             if(item.get("addr1")!=null)
                 addr1 = item.get("addr1").toString();
@@ -139,13 +145,13 @@ public class URLConnector {
             Log.e("ERROR : ", e.getMessage());
         }
     }
-    public void APIsightDetailInfo(String reqCode, String contentid) {
+    public ArrayList<SightListViewItem> APIsightDetailInfo(String reqCode, String contentid) {
 
-        HashMap<String, String> data;
-
+        SightListViewItem data;
+        ArrayList<SightListViewItem> list = new ArrayList<SightListViewItem>();
         try {
             JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(base + reqCode + TOURKEY + "&contentId=" + contentid + sinfo_detail));   // url에서 json값 읽어옴
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(base + reqCode + TOURKEY + "&contentId=" + contentid +"&contentTypeId=25"+ sinfo_detail));   // url에서 json값 읽어옴
             JSONObject json1 = (JSONObject) jsonObject.get("response");
             JSONObject json2 = (JSONObject) json1.get("body");
             JSONObject json3 = (JSONObject) json2.get("items");
@@ -153,10 +159,9 @@ public class URLConnector {
 
             for (int i = 0; i < array.size(); i++) {
 
-                data = new HashMap<String, String>();
-
                 JSONObject entity = (JSONObject) array.get(i);
                 String subname = entity.get("subname").toString();
+                String cid = entity.get("subcontentid").toString();
                 String subdetailimg;
 
                 if (entity.get("subdetailimg")!=null)
@@ -164,15 +169,14 @@ public class URLConnector {
                 else
                     subdetailimg = "Image Not Found";
 
-                data.put("subdetailimg", subdetailimg);
-                data.put("subname", subname);
-
-                dList.add(data);
+                data = new SightListViewItem(subname, subdetailimg, cid);
+                list.add(data);
             }
         }
         catch (Exception e) {
             Log.e("ERROR : ", e.getMessage());
         }
+        return list;
     }
 
     public ArrayList<HashMap<String, String>> getList()

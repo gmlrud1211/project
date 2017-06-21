@@ -2,6 +2,7 @@ package com.example.db_14.travelplanner;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import android.widget.TextView;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by heekyoung on 2017. 6. 21..
@@ -29,16 +29,14 @@ public class SightViewDetailActivity extends Activity {
     SListAdapter adapter;
     TextView name;
     ImageView image;
-    HashMap<String, String> sightdetailinfo = new HashMap<String, String>();
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_sight_detail_main);
         layout_sight_detail = (ListView)findViewById(R.id.layout_sight_detail);
-
         slist = new ArrayList<SightListViewItem>();
+        slist = (ArrayList<SightListViewItem>)getIntent().getSerializableExtra("sightDetailInfo");
 
         adapter = new SListAdapter(getApplication(), slist);
         layout_sight_detail.setAdapter(adapter);
@@ -47,15 +45,13 @@ public class SightViewDetailActivity extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(SightViewDetailActivity.this, SightViewActivity.class);
+                intent.putExtra("CONTENTID", slist.get(position).getContentid());
+                startActivity(intent);
             }
         });
 
-        name = (TextView)findViewById(R.id.sight_name);
-        image = (ImageView)findViewById(R.id.sight_image);
 
-
-        sightdetailinfo = (HashMap<String, String>)getIntent().getSerializableExtra("sightDetailInfo");
     }
 
     private class SListAdapter extends BaseAdapter{
@@ -95,6 +91,19 @@ public class SightViewDetailActivity extends Activity {
 
             ImageView image = (ImageView) convertView.findViewById(R.id.sight_image);
             TextView subname = (TextView) convertView.findViewById(R.id.sight_name);
+            subname.setText(slist.get(position).getSubname());
+
+            if(slist.get(position).getSubdetailimg() != "Image Not Found") {
+                URLtoBItmap thread = new URLtoBItmap(slist.get(position).getSubdetailimg());
+                thread.start();
+
+                try {
+                    thread.join();
+                    image.setImageBitmap(thread.getBitmap());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
             return convertView;
         }
