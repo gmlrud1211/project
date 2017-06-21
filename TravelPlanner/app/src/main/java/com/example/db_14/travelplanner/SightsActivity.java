@@ -53,6 +53,10 @@ public class SightsActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        if(sightsList.size()==0) {
+
+        }
     }
 
     @Override

@@ -22,6 +22,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.List;
  * Created by a0104 on 2017-02-13.
  */
 
-public class SightViewActivity extends Activity {
+public class SightViewActivity extends Activity implements Serializable {
 
     TextView titleview, overview, addr;
     Button map, bookmark, addplan, course;
@@ -69,12 +70,20 @@ public class SightViewActivity extends Activity {
         URLConnector conn = new URLConnector();
         conn.APIsightInfo("detailCommon?", contentid);
         sight = conn.getList();
-        if(sight.get(0).get("overview")!=null) ovStr = sight.get(0).get("overview");
+        if(sight.get(0).get("overview")!="overview not Found") ovStr = sight.get(0).get("overview");
         else ovStr = "";
 
-        ovStr.replace("<br>", "");
-        ovStr.replace("<br />", "");
-        ovStr.replace("<BR>", "");
+        ovStr = ovStr.replaceAll(System.getProperty("line.separator"), "\n");
+        ovStr = ovStr.replaceAll("<br>", "\n");
+        ovStr = ovStr.replaceAll("<br />", "\n");
+        ovStr = ovStr.replaceAll("<BR>", "\n");
+        ovStr = ovStr.replaceAll(">", "");
+        ovStr = ovStr.replaceAll("&lt;", "");
+        ovStr = ovStr.replaceAll("&gt;", "");
+        ovStr = ovStr.replaceAll("&nbsp;", "");
+        ovStr = ovStr.replaceAll("/", "");
+        ovStr = ovStr.replaceAll("strong", "");
+        ovStr = ovStr.replaceAll("&middot;", "");
 
         titleview.setText(sight.get(0).get("title"));
         overview.setText(ovStr);

@@ -50,13 +50,13 @@ import static com.example.db_14.travelplanner.R.drawable.start_marker;
  * Created by heekyoung on 2017-06-19.
  */
 
-public class FirstFragment  extends Fragment{
+public class FirstFragment  extends Fragment {
 
     String title, pno;
     int like;
     String APPKEY = "2cfca2bc-7f91-3031-b69d-3c7eed12970c";
     ArrayList<SightData> slist;
-    ArrayList<TMapPoint> points, labels;
+    ArrayList<TMapPoint> points;
     Bitmap s_marker, e_marker, path;
     Button bt;
     @Override

@@ -1,10 +1,12 @@
 package com.example.db_14.travelplanner;
 
+import java.io.Serializable;
+
 /**
  * Created by a0104 on 2017-04-25.
  */
 
-public class SightData {
+public class SightData implements Serializable {
     public String sight;
     public double lat;
     public double lon;

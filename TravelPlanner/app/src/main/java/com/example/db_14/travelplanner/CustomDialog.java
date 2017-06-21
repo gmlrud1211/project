@@ -39,6 +39,12 @@ public class CustomDialog extends Dialog {
         btn_1.setOnClickListener(btn1listener);
         btn_2.setOnClickListener(btn2listener);
         txt_dialog_title.setText(title);
+
+        if(title.equals("여행지 정보"))
+        {
+            btn_1.setText("상세 정보");
+            btn_2.setText("일정 삭제");
+        }
     }
 
 }

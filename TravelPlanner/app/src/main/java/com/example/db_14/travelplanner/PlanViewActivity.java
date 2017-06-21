@@ -197,7 +197,7 @@ public class PlanViewActivity extends Activity {
 
         planlist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, long id) {
+            public boolean onItemLongClick(final AdapterView<?> parent, final View view, final int position, long id) {
                 View.OnClickListener dListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -239,12 +239,14 @@ public class PlanViewActivity extends Activity {
                 View.OnClickListener cListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), "삭제를 취소합니다.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(parent.getContext(), SightViewActivity.class);
+                        intent.putExtra("CONTENTID", slist.get(position).contentid);
                         dialog.cancel();
+                        startActivity(intent);
                     }
                 };
 
-                dialog = new CustomDialog(parent.getContext(), cListener, dListener, "일정을 삭제하시겠습니까?");
+                dialog = new CustomDialog(parent.getContext(), cListener, dListener, "여행지 정보");
                 dialog.show();
                 return false;
             }

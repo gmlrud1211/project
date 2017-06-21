@@ -107,7 +107,7 @@ public class URLConnector {
 
             data = new HashMap<String, String>();
 
-            String overview = item.get("overview").toString();
+            String overview;
             String mapx = item.get("mapx").toString();
             String mapy = item.get("mapy").toString();
             String firstimage;
@@ -117,6 +117,11 @@ public class URLConnector {
                 addr1 = item.get("addr1").toString();
             else
                 addr1 = "addr1 not Found";
+
+            if(item.get("overview")!=null)
+                overview = item.get("overview").toString();
+            else
+                overview = "overview not Found";
 
             if (item.get("firstimage")!=null)
                 firstimage = item.get("firstimage").toString();

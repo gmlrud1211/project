@@ -1,10 +1,12 @@
 package com.example.db_14.travelplanner;
 
+import java.io.Serializable;
+
 /**
  * Created by heekyoung on 2017-06-16.
  */
 
-public class ReviewListViewItem {
+public class ReviewListViewItem implements Serializable {
     private String pno;
     private String title;
     private String reviewer;
