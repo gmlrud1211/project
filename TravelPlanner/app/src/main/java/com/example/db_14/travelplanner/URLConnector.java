@@ -20,6 +20,7 @@ public class URLConnector {
     String base = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/";
     String TOURKEY = "ServiceKey=dx6Je9L%2FluhYWHKwoLx0GoEk7VvDKF0ABstzCLgfe7MJIFpFQ3EhtGGs1TfPkuqbScvzFxVxbLjcrMrztNFV2w%3D%3D&MobileOS=AND&MobileApp=TravelPlanner&numOfRows=100&_type=json";
     String sinfo_opt = "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y";
+    String sinfo_detail = "&listYN=Y";
     ArrayList<HashMap<String, String>> dList;  // 결과값 담아줄 arraylist
 
     public URLConnector() {
@@ -105,9 +106,10 @@ public class URLConnector {
             JSONObject json3 = (JSONObject) json2.get("items");
             JSONObject item = (JSONObject) json3.get("item");
 
+
             data = new HashMap<String, String>();
 
-            String overview;
+            String overview = item.get("overview").toString();
             String mapx = item.get("mapx").toString();
             String mapy = item.get("mapy").toString();
             String firstimage;
@@ -117,11 +119,6 @@ public class URLConnector {
                 addr1 = item.get("addr1").toString();
             else
                 addr1 = "addr1 not Found";
-
-            if(item.get("overview")!=null)
-                overview = item.get("overview").toString();
-            else
-                overview = "overview not Found";
 
             if (item.get("firstimage")!=null)
                 firstimage = item.get("firstimage").toString();
@@ -136,7 +133,42 @@ public class URLConnector {
             data.put("mapy", mapy);
             data.put("title", title);
 
+            dList.add(data);
+        }
+        catch (Exception e) {
+            Log.e("ERROR : ", e.getMessage());
+        }
+    }
+    public void APIsightDetailInfo(String reqCode, String contentid) {
+
+        HashMap<String, String> data;
+
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(base + reqCode + TOURKEY + "&contentId=" + contentid + sinfo_detail));   // url에서 json값 읽어옴
+            JSONObject json1 = (JSONObject) jsonObject.get("response");
+            JSONObject json2 = (JSONObject) json1.get("body");
+            JSONObject json3 = (JSONObject) json2.get("items");
+            JSONArray array = (JSONArray) json3.get("item");
+
+            for (int i = 0; i < array.size(); i++) {
+
+                data = new HashMap<String, String>();
+
+                JSONObject entity = (JSONObject) array.get(i);
+                String subname = entity.get("subname").toString();
+                String subdetailimg;
+
+                if (entity.get("subdetailimg")!=null)
+                    subdetailimg = entity.get("subdetailimg").toString();
+                else
+                    subdetailimg = "Image Not Found";
+
+                data.put("subdetailimg", subdetailimg);
+                data.put("subname", subname);
+
                 dList.add(data);
+            }
         }
         catch (Exception e) {
             Log.e("ERROR : ", e.getMessage());
