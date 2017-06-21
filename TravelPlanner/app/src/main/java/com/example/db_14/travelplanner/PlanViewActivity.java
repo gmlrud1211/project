@@ -59,7 +59,7 @@ public class PlanViewActivity extends Activity {
     String sdate, fdate, pno;
     ArrayList<SightData> slist;
     ArrayList<TMapPoint> points;
-    Button shortpath, addreview, editplan;
+    Button shortpath, addreview;
     ListAdapter adapter;
     ArrayList<TMapMarkerItem> markers;
     CustomDialog dialog;

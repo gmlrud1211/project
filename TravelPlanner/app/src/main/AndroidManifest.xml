@@ -35,6 +35,8 @@
         <activity android:name=".AccountEditActivity"/>
         <activity android:name=".AccountAddActivity"/>
         <activity android:name=".PlanViewActivity"/>
+        <activity android:name=".ReviewDetailActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".ReviewActivity"/>
         <activity android:name=".ReviewAddActivity"/>
         <activity android:name=".PlanEditActivity"/>

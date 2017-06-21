@@ -5,7 +5,6 @@ package com.example.db_14.travelplanner;
  */
 
 public class SightData {
-    public String day;
     public String sight;
     public double lat;
     public double lon;
@@ -16,16 +15,6 @@ public class SightData {
         this.lat = lat;
         this.lon = lon;
         this.contentid = contentid;
-    }
-
-    public void setDay(String day)
-    {
-        this.day = day;
-    }
-
-    public String getDay()
-    {
-        return day;
     }
 
     public void setSight(String sight)

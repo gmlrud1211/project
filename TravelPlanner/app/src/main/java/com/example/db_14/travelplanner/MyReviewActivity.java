@@ -35,12 +35,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import java.io.BufferedInputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by a0104 on 2017-06-19.
  */
@@ -90,6 +84,13 @@ public class MyReviewActivity extends Activity {
                     adapter.notifyDataSetChanged();
                     return;
                 }
+                Intent intent = new Intent(MyReviewActivity.this, ReviewDetailActivity.class);
+                intent.putExtra("PNO", rlist.get(i).getPno());
+                intent.putExtra("PNAME", rlist.get(i).getTitle());
+                intent.putExtra("PTEXT", rlist.get(i).getText());
+                intent.putExtra("PLIKE", rlist.get(i).getLike());
+                intent.putExtra("PID", rlist.get(i).getReviewer());
+                startActivityForResult(intent, 1);
             }
         });
     }
@@ -203,6 +204,20 @@ public class MyReviewActivity extends Activity {
             like.setText(String.valueOf(list.get(pos).getLike()));
 
             return convertView;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int request, int result, Intent in)
+    {
+        if (request==1)
+        {
+            if(result==RESULT_OK)
+            {
+                rlist.clear();
+                getReview();
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 

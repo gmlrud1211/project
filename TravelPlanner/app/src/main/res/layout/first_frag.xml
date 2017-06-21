@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#E2E2E2">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#E2E2E2"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/pname"
-        android:layout_width="wrap_content"
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="26dp"
-        android:text="여행제목"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="11dp" />
+        android:background="#4ba8ff">
 
-    <ImageView
+        <TextView
+            android:id="@+id/review_pname"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#4ba8ff"
+            android:textSize="20dp"
+            android:text="여행 제목"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+    </RelativeLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:id="@+id/sight_image"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/review_map">
+    </FrameLayout>
 
     <TableRow
         android:layout_width="match_parent"
@@ -34,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"/>
         <TextView
-            android:id="@+id/sight_add"
+            android:id="@+id/sight_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="여행지 목록"
@@ -44,20 +51,21 @@
             android:gravity="center"
             android:layout_weight="1"
             />
-
         <Button
-            android:id="@+id/like"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
+            android:id="@+id/review_like"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
             android:background="@drawable/like"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:text="0"/>
     </TableRow>
 
-
     <ListView
-        android:id="@+id/planv_list"
+        android:id="@+id/review_plist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
 
 </LinearLayout>

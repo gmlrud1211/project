@@ -2,11 +2,13 @@ package com.example.db_14.travelplanner;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -46,6 +48,19 @@ public class ReviewActivity extends Activity {
 
         adapter = new RListAdapter(getApplicationContext(),rlist);
         review_activity_main.setAdapter(adapter);
+
+        review_activity_main.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ReviewActivity.this, ReviewDetailActivity.class);
+                intent.putExtra("PNO", rlist.get(position).getPno());
+                intent.putExtra("PNAME", rlist.get(position).getTitle());
+                intent.putExtra("PTEXT", rlist.get(position).getText());
+                intent.putExtra("PLIKE", rlist.get(position).getLike());
+                intent.putExtra("PID", rlist.get(position).getReviewer());
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
     public void getReview()
@@ -139,6 +154,20 @@ public class ReviewActivity extends Activity {
             like.setText(String.valueOf(list.get(pos).getLike()));
 
             return convertView;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int request, int result, Intent in)
+    {
+        if (request==1)
+        {
+            if(result==RESULT_OK)
+            {
+                rlist.clear();
+                getReview();
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 
