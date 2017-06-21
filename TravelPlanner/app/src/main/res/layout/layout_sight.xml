@@ -81,6 +81,16 @@
             android:layout_marginRight="10dp"
             android:textColor="#000000"/>
 
+        <Button
+            android:id="@+id/course_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bluebtn_background"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#ffffff"
+            android:visibility="invisible"
+            android:layout_marginTop="25dp"
+            android:text="코스상세정보"/>
     </LinearLayout>
 
 </ScrollView>

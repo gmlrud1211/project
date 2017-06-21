@@ -45,6 +45,7 @@ public class ListActivity extends Activity {
                 Intent intent = new Intent(ListActivity.this, SigunguActivity.class);
                 intent.putExtra("areaCode", areaList.get(i).get("code"));
                 intent.putExtra("ContentTypeId", contenttypeid);
+                intent.putExtra("is_recommend",getIntent().getIntExtra("is_recommend",0));
                 startActivity(intent);
             }
         });

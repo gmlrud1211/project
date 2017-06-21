@@ -63,6 +63,12 @@ public class MainUIActivity extends AppCompatActivity
                 intent.putExtra("areaList", conn.getList());
                 intent.putExtra("ContentTypeId", "32");
             }
+            else if(id == R.id.recommend)
+            {
+                intent.putExtra("areaList", conn.getList());
+                intent.putExtra("ContentTypeId", "25");
+                intent.putExtra("is_recommend",1);
+            }
             else if(id == R.id.festival)
             {
                 intent.putExtra("areaList", conn.getList());

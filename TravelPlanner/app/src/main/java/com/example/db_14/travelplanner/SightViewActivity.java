@@ -33,12 +33,13 @@ import java.util.List;
 public class SightViewActivity extends Activity {
 
     TextView titleview, overview, addr;
-    Button map, bookmark, addplan;
+    Button map, bookmark, addplan, course;
     ImageView image;
     String ovStr, contentid;
     String usrid;
     HashMap<String, String> sightinfo = new HashMap<String, String>();
     ArrayList<HashMap<String, String>> sight = new ArrayList<HashMap<String, String>>();
+    int is_recommend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class SightViewActivity extends Activity {
 
         final DBHelper dbHelper = new DBHelper(getApplicationContext(), "UserInfo.db", null, 1);
         usrid = dbHelper.getResult().get("usrid");
+        is_recommend = getIntent().getIntExtra("is_recommend",0);
 
         titleview = (TextView) findViewById(R.id.sight_title);
         overview = (TextView) findViewById(R.id.sight_overview);
@@ -55,8 +57,11 @@ public class SightViewActivity extends Activity {
         map = (Button) findViewById(R.id.sight_map);
         bookmark = (Button) findViewById(R.id.bookmark);
         addplan = (Button) findViewById(R.id.add_plan);
+        course = (Button) findViewById(R.id.course_btn);
 
         sightinfo = (HashMap<String, String>) getIntent().getSerializableExtra("sightInfo");
+
+        if(is_recommend==1) course.setVisibility(View.VISIBLE);
 
         if(sightinfo!=null) contentid = sightinfo.get("contentid");
         else contentid = getIntent().getStringExtra("CONTENTID");
@@ -73,7 +78,9 @@ public class SightViewActivity extends Activity {
 
         titleview.setText(sight.get(0).get("title"));
         overview.setText(ovStr);
-        addr.setText(conn.getList().get(0).get("addr1"));
+
+        if(conn.getList().get(0).get("addr1")!="addr1 not Found")addr.setText(conn.getList().get(0).get("addr1"));
+        else addr.setText("");
 
         if(conn.getList().get(0).get("firstimage") != "Image Not Found") {
             URLtoBItmap thread = new URLtoBItmap(conn.getList().get(0).get("firstimage"));

@@ -107,11 +107,16 @@ public class URLConnector {
 
             data = new HashMap<String, String>();
 
-            String addr1 = item.get("addr1").toString();
             String overview = item.get("overview").toString();
             String mapx = item.get("mapx").toString();
             String mapy = item.get("mapy").toString();
             String firstimage;
+            String addr1;
+
+            if(item.get("addr1")!=null)
+                addr1 = item.get("addr1").toString();
+            else
+                addr1 = "addr1 not Found";
 
             if (item.get("firstimage")!=null)
                 firstimage = item.get("firstimage").toString();

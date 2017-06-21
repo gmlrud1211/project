@@ -49,6 +49,7 @@ public class SightsActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(SightsActivity.this, SightViewActivity.class);
                 intent.putExtra("sightInfo", sightsList.get(i));
+                intent.putExtra("is_recommend",getIntent().getIntExtra("is_recommned",0));
                 startActivity(intent);
             }
         });

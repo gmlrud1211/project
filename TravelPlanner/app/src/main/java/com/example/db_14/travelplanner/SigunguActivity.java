@@ -51,6 +51,7 @@ public class SigunguActivity extends Activity {
                 intent.putExtra("areaCode", areaCode);
                 intent.putExtra("sigunguCode", sigunguList.get(i).get("code"));
                 intent.putExtra("ContentTypeId", contenttypeid);
+                intent.putExtra("is_reommend",getIntent().getIntExtra("is_recommend",0));
                 startActivity(intent);
             }
         });
