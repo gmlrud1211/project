@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.example.db_14.travelplanner.UserManagements.LoginActivity;
+
 /**
  * Created by db-14 on 2017. 2. 7..
  */
