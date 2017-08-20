@@ -18,7 +18,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by a0104 on 2017-07-06.
@@ -27,7 +29,10 @@ import java.util.List;
 public class PublicTransportRoute {
 
     private  ArrayList<TMapPoint> base_path, opt_path;
-    int n;
+    private HashMap<String, TransPortData> base_pass;
+    private ArrayList<TransPortData> opt_pass;
+    private int n, state=0;
+    private int idx_pass[][];
     private boolean visit[];
     private long data[][];
     private int s, e;
@@ -37,6 +42,9 @@ public class PublicTransportRoute {
         n = base_path.size();
         visit = new boolean[n];
         data = new long[n][n];
+        base_pass = new HashMap<String, TransPortData>();
+        idx_pass = new int[n][n];
+        opt_pass = new ArrayList<TransPortData>();
         opt_path = new ArrayList<TMapPoint>();
 
         for(int i=0; i<n; i++)
@@ -45,16 +53,17 @@ public class PublicTransportRoute {
         }
     }
 
-    public void setOptimalRoute() throws Exception
+    public int setOptimalRoute() throws Exception
     {
-        if(n<3)
+        if(n<2)
         {
-            opt_path = base_path;
-            return;
+            return -1;
         }
 
         setArrayDistance();
+        if(state==1) return -1;
         findShortestPath();
+        return 1;
     }
 
     private void setArrayDistance() {
@@ -63,20 +72,48 @@ public class PublicTransportRoute {
             JSONParser jsonParser = new JSONParser();
             for (int i=0; i<n; i++)
             {
-                for (int j=i; j<n; j++) {
+                for (int j=0; j<n; j++) {
+                    if(i==j) {
+                        data[i][j] = (long) 0;
+                        continue;
+                    }
                     JSONObject jsonObject = (JSONObject) jsonParser.parse(readUrl(
                             String.valueOf(base_path.get(i).getLongitude()),    //startX
                             String.valueOf(base_path.get(i).getLatitude()),     //startY
                             String.valueOf(base_path.get(j).getLongitude()),    //endX
                             String.valueOf(base_path.get(j).getLatitude())      //endY
                     ));   // url에서 json값 읽어옴
+
                     JSONObject json1 = (JSONObject) jsonObject.get("result");
+
+                    if(json1==null) {
+                        state = 1;
+                        return;
+                    }
+
                     JSONArray json2 = (JSONArray) json1.get("path");    // 경로 json array
-//            JSONObject json3 = (JSONObject) json2.get("items");
                     JSONObject json3 = (JSONObject) json2.get(0);   // 최단 대중교통 경로 루트 json object
                     JSONObject info = (JSONObject) json3.get("info");     //
-//            JSONArray subpath = (JSONArray) json3.get("subPath");     //
-                    data[i][j] = data[j][i] = (long) info.get("totalTime");
+                    JSONArray subPath = (JSONArray) json3.get("subPath");
+                    // 환승의 경우 고려해야함, (subPath - 1) / 2 == 경로의 수 ok
+                    // 추가해주는 부분은 문제가 없으나 base_path의 배열이 한정되어 있음, 경로 개수 배열 추가, 해시맵을 이용해 경로별 인덱스를 부여하는 방식으로 해결 ok
+                    int pass_cnt = (subPath.size() - 1) / 2;
+                    for(int idx=subPath.size()-2; idx>0;idx-=2) {
+                        JSONObject json4 = (JSONObject) subPath.get(idx);
+                        String busNo="";
+                        JSONObject lane = (JSONObject) json4.get("lane");
+                        if(lane.get("name")==null) busNo = lane.get("busNo").toString();
+                        else if(lane.get("busNo")==null) busNo = lane.get("name").toString();
+                        // 환승 경로별로 내리는 정류장과 소요 시간이 다름, 고려 필요함
+                        String sname = json4.get("startName").toString();
+                        String ename = json4.get("endName").toString();
+                        long sectiontime = (long) json4.get("sectionTime");
+                        long totaltime = (long) info.get("totalTime");
+                        idx_pass[i][j]++;
+                        String pass_idx = i+","+j+"-"+pass_cnt--;
+                        base_pass.put(pass_idx,new TransPortData(busNo, sname, ename, sectiontime));
+                        data[i][j] = totaltime;
+                    }
                 }
             }
             Log.d("d", "path end");
@@ -112,11 +149,20 @@ public class PublicTransportRoute {
             {
                 visit[e] = true;
                 opt_path.add(base_path.get(e));
+                for(int idx=1; idx<=idx_pass[i][e]; idx++) {
+                    String pass_idx = i+","+e+"-"+idx;
+                    opt_pass.add(base_pass.get(pass_idx));
+                }
+
                 break;
             }
 
             visit[k] = true;
             opt_path.add(base_path.get(k));
+            for(int idx=1; idx<=idx_pass[i][k]; idx++) {
+                String pass_idx = i+","+k+"-"+idx;
+                opt_pass.add(base_pass.get(pass_idx));
+            }
 
             min = 1000000000;
             find = false;
@@ -126,6 +172,10 @@ public class PublicTransportRoute {
 
     public ArrayList<TMapPoint> getOptimalRoute() throws Exception {
         return opt_path;
+    }
+
+    public ArrayList<TransPortData> getOptimalPassList() throws Exception {
+        return opt_pass;
     }
 
     private String readUrl(String startX, String startY, String endX, String endY) {
