@@ -1,6 +1,8 @@
 package com.example.db_14.travelplanner.Plans;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,7 +10,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +24,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +58,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedInputStream;
+import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +74,7 @@ import static com.example.db_14.travelplanner.R.drawable.start_marker;
 
 public class PlanViewActivity extends Activity {
     String APPKEY = "2cfca2bc-7f91-3031-b69d-3c7eed12970c", usrid;
+    Dialog _dialog =  null;
     TextView pname;
     ListView planlist;
     String sdate, fdate, pno;
@@ -88,6 +98,9 @@ public class PlanViewActivity extends Activity {
         shortpath = (Button) findViewById(R.id.shortpath);
         addreview = (Button) findViewById(R.id.addreview);
         addTraveler = (Button) findViewById(R.id.addTraveler);
+        _dialog = new Dialog(this, R.style.MyDialog);
+        _dialog.setCancelable(true);
+        _dialog.addContentView(new ProgressBar(this), new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         slist = new ArrayList<SightData>();
         points = new ArrayList<TMapPoint>();
@@ -148,55 +161,49 @@ public class PlanViewActivity extends Activity {
                 View.OnClickListener cpListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ArrayList<TMapPoint> opt = new ArrayList<TMapPoint>();
-                        TMapPolyLine line = new TMapPolyLine();
-
-                        try {
-                            TourRouteManager tourRouteManager = new TourRouteManager(points);
-                            tourRouteManager.setOptimalRoute();
-
-                            opt = tourRouteManager.getOptimalRoute();
-
-                            for(int i=0; i<opt.size(); i++)
-                            {
-                                line.addLinePoint(opt.get(i));
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        line.setLineWidth(6);
-                        line.setOutLineWidth(0);
-                        line.setLineColor(Color.RED);
-                        tMapView.addTMapPath(line);
                         dialog.cancel();
+                        _dialog.show();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Looper.prepare();
+                                ArrayList<TMapPoint> opt = new ArrayList<TMapPoint>();
+                                TMapPolyLine line = new TMapPolyLine();
+
+                                try {
+                                    TourRouteManager tourRouteManager = new TourRouteManager(points);
+                                    tourRouteManager.setOptimalRoute();
+
+                                    opt = tourRouteManager.getOptimalRoute();
+
+                                    for(int i=0; i<opt.size(); i++)
+                                    {
+                                        line.addLinePoint(opt.get(i));
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                line.setLineWidth(6);
+                                line.setOutLineWidth(0);
+                                line.setLineColor(Color.RED);
+                                tMapView.addTMapPath(line);
+                                _dialog.dismiss();
+                                Looper.loop();
+                            }
+                        }).start();
+
                     }
                 };
 
                 View.OnClickListener tpListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ArrayList<TMapPoint> opt = new ArrayList<TMapPoint>();
-                        TMapPolyLine line = new TMapPolyLine();
-
-                        try {
-                            PublicTransportRoute publicTransportRoute = new PublicTransportRoute(points);
-                            publicTransportRoute.setOptimalRoute();
-
-                            opt = publicTransportRoute.getOptimalRoute();
-
-                            for(int i=0; i<opt.size(); i++)
-                            {
-                                line.addLinePoint(opt.get(i));
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        line.setLineWidth(6);
-                        line.setOutLineWidth(0);
-                        line.setLineColor(Color.BLUE);
-                        tMapView.addTMapPath(line);
+                        Intent intent = new Intent(PlanViewActivity.this, TransportViewActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("SLIST", slist);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                         dialog.cancel();
                     }
                 };
@@ -297,17 +304,6 @@ public class PlanViewActivity extends Activity {
                 return false;
             }
         });
-    }
-
-    public void getShortPath(int option) {
-        if (option==1) {
-
-        }
-        else if (option==2) {
-
-        }
-
-
     }
 
     public void getPlanlist(String pno)

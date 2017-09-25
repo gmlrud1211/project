@@ -47,7 +47,7 @@
         <activity
             android:name=".MainUIActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-
+        <activity android:name=".Plans.TransportViewActivity"/>
         <service
             android:name=".Services.InviteService"
             android:enabled="true"
