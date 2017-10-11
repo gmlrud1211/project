@@ -3,7 +3,7 @@ package com.example.db_14.travelplanner.Reviews;
 import java.io.Serializable;
 
 /**
- * Created by heekyoung on 2017-06-16.
+ * Created by a0104 on 2017-06-16.
  */
 
 public class ReviewListViewItem implements Serializable {

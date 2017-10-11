@@ -24,7 +24,7 @@
         <activity android:name=".UserManagements.LoginActivity" />
         <activity android:name=".UserManagements.SignupActivity" />
         <activity android:name=".Sights.ListActivity" />
-        <activity android:name=".MainUIActivity$SigunguActivity" />
+        <activity android:name=".Sights.SigunguActivity" />
         <activity android:name=".Sights.SightsActivity" />
         <activity android:name=".Sights.SightViewActivity" />
         <activity android:name=".Sights.SightMapActivity" />

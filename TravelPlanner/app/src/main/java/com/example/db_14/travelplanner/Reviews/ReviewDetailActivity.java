@@ -23,6 +23,10 @@ import java.io.BufferedInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * Created by a0104 on 2017-06-17.
+ */
+
 public class ReviewDetailActivity extends AppCompatActivity {
 
     ViewPager mViewPager = null;

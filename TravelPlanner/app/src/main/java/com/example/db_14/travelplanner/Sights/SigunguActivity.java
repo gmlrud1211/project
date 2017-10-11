@@ -9,24 +9,27 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.db_14.travelplanner.R;
+import com.example.db_14.travelplanner.URLConnectors.URLConnector;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by db-14 on 2017. 2. 10..
+ * Created by a0104 on 2017-02-13.
  */
-public class ListActivity extends Activity {
 
-    ArrayList<HashMap<String, String>> areaList = new ArrayList<HashMap<String, String>>();
-    String contenttypeid;
+public class SigunguActivity extends Activity {
+
+    String areaCode, contenttypeid;
+    ArrayList<HashMap<String, String>> sigunguList = new ArrayList<HashMap<String, String>>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        areaList =  (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("areaList");
+        areaCode =  getIntent().getStringExtra("areaCode");
         contenttypeid = getIntent().getStringExtra("ContentTypeId");
         final ListView listview ;
         final ListViewAdapter adapter;
@@ -38,13 +41,17 @@ public class ListActivity extends Activity {
         listview = (ListView) findViewById(R.id.list_view);
         listview.setAdapter(adapter);
 
-        adapter.addItem(areaList);
+        URLConnector conn = new URLConnector();
+        conn.APIareaCode("areaCode?areaCode="+areaCode+"&");
+        sigunguList = conn.getList();
+        adapter.addItem(sigunguList);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(ListActivity.this, SigunguActivity.class);
-                intent.putExtra("areaCode", areaList.get(i).get("code"));
+                Intent intent = new Intent(SigunguActivity.this, SightsActivity.class);
+                intent.putExtra("areaCode", areaCode);
+                intent.putExtra("sigunguCode", sigunguList.get(i).get("code"));
                 intent.putExtra("ContentTypeId", contenttypeid);
                 intent.putExtra("is_recommend",getIntent().getIntExtra("is_recommend",0));
                 startActivity(intent);
@@ -57,4 +64,3 @@ public class ListActivity extends Activity {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }
-

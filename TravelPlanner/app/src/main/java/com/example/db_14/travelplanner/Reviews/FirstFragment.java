@@ -49,7 +49,7 @@ import static com.example.db_14.travelplanner.R.drawable.marker;
 import static com.example.db_14.travelplanner.R.drawable.start_marker;
 
 /**
- * Created by heekyoung on 2017-06-19.
+ * Created by a0104 on 2017-06-19.
  */
 
 public class FirstFragment  extends Fragment {

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by heekyoung on 2017-06-17.
+ * Created by a0104 on 2017-06-17.
  */
 
 public class ReviewAddActivity extends Activity {

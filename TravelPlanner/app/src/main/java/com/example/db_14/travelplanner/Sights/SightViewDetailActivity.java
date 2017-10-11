@@ -35,7 +35,7 @@ public class SightViewDetailActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_sight_detail_main);
+        setContentView(R.layout.layout_course_detail);
         layout_sight_detail = (ListView)findViewById(R.id.layout_sight_detail);
         slist = new ArrayList<SightListViewItem>();
         slist = (ArrayList<SightListViewItem>)getIntent().getSerializableExtra("sightDetailInfo");
@@ -88,7 +88,7 @@ public class SightViewDetailActivity extends Activity {
             if(convertView == null)
             {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.layout_sight_detail,parent,false);
+                convertView = inflater.inflate(R.layout.layout_course,parent,false);
             }
 
             ImageView image = (ImageView) convertView.findViewById(R.id.sight_image);

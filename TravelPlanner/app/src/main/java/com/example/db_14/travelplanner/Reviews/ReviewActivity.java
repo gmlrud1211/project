@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by heekyoung on 2017-06-16.
+ * Created by a0104 on 2017-06-16.
  */
 
 public class ReviewActivity extends Activity {

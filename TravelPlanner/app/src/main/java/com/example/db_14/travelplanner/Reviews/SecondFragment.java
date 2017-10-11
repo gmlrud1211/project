@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by heekyoung on 2017-06-19.
+ * Created by a0104 on 2017-06-19.
  */
 
 public class SecondFragment extends Fragment {
