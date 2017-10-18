@@ -101,7 +101,8 @@ public class PublicTransportRoute {
                     for(int idx=subPath.size()-2; idx>0;idx-=2) {
                         JSONObject json4 = (JSONObject) subPath.get(idx);
                         String busNo="";
-                        JSONObject lane = (JSONObject) json4.get("lane");
+//                        JSONObject lane = (JSONObject) json4.get("lane");
+                        JSONObject lane = (JSONObject) ((JSONArray)(json4.get("lane"))).get(0);
                         if(lane.get("name")==null) busNo = lane.get("busNo").toString();
                         else if(lane.get("busNo")==null) busNo = lane.get("name").toString();
                         // 환승 경로별로 내리는 정류장과 소요 시간이 다름, 고려 필요함
